@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SwiftTask.Backend.Infrastructure;
 
@@ -11,9 +12,11 @@ using SwiftTask.Backend.Infrastructure;
 namespace SwiftTask.Backend.Migrations
 {
     [DbContext(typeof(SwiftTaskDbContext))]
-    partial class SwiftTaskDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250417200413_ExtendIdentityUser")]
+    partial class ExtendIdentityUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,11 +89,6 @@ namespace SwiftTask.Backend.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -142,10 +140,6 @@ namespace SwiftTask.Backend.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator().HasValue("IdentityUser");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -229,58 +223,6 @@ namespace SwiftTask.Backend.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("SwiftTask.Backend.Models.Task", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TopicId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TopicId");
-
-                    b.ToTable("Tasks");
-                });
-
-            modelBuilder.Entity("SwiftTask.Backend.Models.Topic", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SwiftTaskUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SwiftTaskUserId");
-
-                    b.ToTable("Topics");
-                });
-
-            modelBuilder.Entity("SwiftTask.Backend.Models.SwiftTaskUser", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.HasDiscriminator().HasValue("SwiftTaskUser");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -330,38 +272,6 @@ namespace SwiftTask.Backend.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("SwiftTask.Backend.Models.Task", b =>
-                {
-                    b.HasOne("SwiftTask.Backend.Models.Topic", "Topic")
-                        .WithMany("Tasks")
-                        .HasForeignKey("TopicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Topic");
-                });
-
-            modelBuilder.Entity("SwiftTask.Backend.Models.Topic", b =>
-                {
-                    b.HasOne("SwiftTask.Backend.Models.SwiftTaskUser", "User")
-                        .WithMany("Topics")
-                        .HasForeignKey("SwiftTaskUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("SwiftTask.Backend.Models.Topic", b =>
-                {
-                    b.Navigation("Tasks");
-                });
-
-            modelBuilder.Entity("SwiftTask.Backend.Models.SwiftTaskUser", b =>
-                {
-                    b.Navigation("Topics");
                 });
 #pragma warning restore 612, 618
         }
