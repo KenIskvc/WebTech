@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34408.163
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwiftTask.Backend", "SwiftTask.Backend\SwiftTask.Backend.csproj", "{50A62A61-D2F8-4FFA-867D-8DD852BCAE76}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{44404D04-21D8-4951-BC8D-33541D0DD5AF}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{50A62A61-D2F8-4FFA-867D-8DD852BCAE76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50A62A61-D2F8-4FFA-867D-8DD852BCAE76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50A62A61-D2F8-4FFA-867D-8DD852BCAE76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50A62A61-D2F8-4FFA-867D-8DD852BCAE76}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B063AE08-2D63-45BB-93FE-6145A6DEC964}
+	EndGlobalSection
+EndGlobal
