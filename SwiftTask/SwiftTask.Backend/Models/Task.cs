@@ -2,9 +2,11 @@
 {
     public class Task
     {
-        public Task(string description)
+        public Task(string description, Topic topic)
         {
             Description = description;
+            Topic = topic;
+            TopicId = topic.Id;
         }
 
         public int Id { get; private set; }

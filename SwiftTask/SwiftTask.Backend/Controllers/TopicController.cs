@@ -23,9 +23,7 @@ namespace SwiftTask.Backend.Controllers
             foreach (var topic in Topics)
             {
                 var newTopic = new Topic(topic);
-                var newTask = new Task("Aufgabe 2");
-                newTopic.Tasks.Add(newTask);
-                topicList.Add(newTopic);
+                var newTask = new Task("Aufgabe 2", newTopic);
             }
 
             return topicList;
