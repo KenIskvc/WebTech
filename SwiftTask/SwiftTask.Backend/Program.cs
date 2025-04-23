@@ -39,10 +39,14 @@ if( app.Environment.IsDevelopment() )
     app.UseSwaggerUI();
 }
 
+app.UseDefaultFiles();
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 app.UseAuthorization();
 app.MapIdentityApi<SwiftTaskUser>();
 app.MapControllers();
+
+app.MapGet( "api/helloWorld", () => "Hello World!" );
 
 app.Run();
