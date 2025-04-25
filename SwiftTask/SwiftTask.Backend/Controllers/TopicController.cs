@@ -1,7 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SwiftTask.Backend.Infrastructure;
 using SwiftTask.Backend.Models;
-using Task = SwiftTask.Backend.Models.Task;
 
 namespace SwiftTask.Backend.Controllers
 {
@@ -9,24 +14,95 @@ namespace SwiftTask.Backend.Controllers
     [ApiController]
     public class TopicController : ControllerBase
     {
-        private static readonly string[] Topics = new[]
+        private readonly SwiftTaskDbContext _context;
+
+        public TopicController(SwiftTaskDbContext context)
         {
-            "Mathematik", "WebTech", "NETA", "Programmieren"
-        };
+            _context = context;
+        }
 
-
-        [HttpGet(Name = "GetTopics")]
-        public List<Topic> Get()
+        // GET: api/Topic
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Topic>>> GetTopics()
         {
-            var topicList = new List<Topic>();
+            return await _context.Topics.ToListAsync();
+        }
 
-            foreach (var topic in Topics)
+        // GET: api/Topic/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Topic>> GetTopic(int id)
+        {
+            var topic = await _context.Topics.FindAsync(id);
+
+            if (topic == null)
             {
-                var newTopic = new Topic(topic);
-                var newTask = new Task("Aufgabe 2", newTopic);
+                return NotFound();
             }
 
-            return topicList;
+            return topic;
+        }
+
+        // PUT: api/Topic/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutTopic(int id, Topic topic)
+        {
+            if (id != topic.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(topic).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TopicExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        // POST: api/Topic
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<Topic>> PostTopic(Topic topic)
+        {
+            _context.Topics.Add(topic);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetTopic", new { id = topic.Id }, topic);
+        }
+
+        // DELETE: api/Topic/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTopic(int id)
+        {
+            var topic = await _context.Topics.FindAsync(id);
+            if (topic == null)
+            {
+                return NotFound();
+            }
+
+            _context.Topics.Remove(topic);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private bool TopicExists(int id)
+        {
+            return _context.Topics.Any(e => e.Id == id);
         }
     }
 }
