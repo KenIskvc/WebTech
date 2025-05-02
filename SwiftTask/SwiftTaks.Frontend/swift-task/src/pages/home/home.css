@@ -1,0 +1,234 @@
+/* ============================
+   Farbvariablen & Dark Mode
+============================ */
+
+:root {
+    --bg-color: #F5F7FA;
+    --text-color: #1a202c;
+    --sidebar-bg: #1f2a37;
+    --sidebar-text: #e5e7eb;
+    --card-bg: #FFFFFF;
+    --button-bg: #3A8DFF;
+    --input-bg: #ffffff;
+    --input-border: #ccc;
+}
+
+.dark-mode {
+    --bg-color: #1a202c;
+    --text-color: black;
+    --sidebar-bg: #2d3748;
+    --sidebar-text: #f5f7fa;
+    --card-bg: #2d3748;
+    --button-bg: #3A8DFF;
+    --input-bg: #4A5568;
+    --input-border: #A0AEC0;
+}
+
+.dark-mode .topbar {
+    color: #f5f7fa;
+}
+
+
+/* ============================
+     Base Styles
+  ============================ */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.app {
+    display: flex;
+    width: 100%;
+}
+
+
+/* ============================
+     Sidebar
+  ============================ */
+
+.sidebar {
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    width: 220px;
+    padding: 20px;
+}
+
+.sidebar h1 {
+    font-size: 1.5em;
+    margin-bottom: 30px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar li {
+    margin: 15px 0;
+    color: var(--sidebar-text);
+}
+
+
+/* ============================
+     Main Content
+  ============================ */
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    position: relative;
+}
+
+
+/* ============================
+     Topbar
+  ============================ */
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.top-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.top-controls input[type="text"] {
+    padding: 8px;
+    border-radius: 8px;
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--text-color);
+}
+
+
+/* ============================
+     Buttons
+  ============================ */
+
+.btn {
+    background-color: var(--button-bg);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+
+/* ============================
+     Task Cards
+  ============================ */
+
+.task-lists {
+    display: flex;
+    gap: 20px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.card {
+    padding: 20px;
+    border-radius: 12px;
+    width: 240px;
+    background-color: var(--card-bg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    color: var(--text-color);
+}
+
+.card h3 {
+    margin-bottom: 12px;
+}
+
+.card ul {
+    list-style: none;
+}
+
+.card li {
+    margin-bottom: 10px;
+}
+
+
+/* ============================
+     Bottom Button
+  ============================ */
+
+.bottom-btn {
+    margin-top: 40px;
+}
+
+
+/* ============================
+     Toggle Switch
+  ============================ */
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: #3A8DFF;
+}
+
+input:checked+.slider:before {
+    transform: translateX(22px);
+}
+
+.task-checkbox {
+    cursor: pointer;
+    accent-color: var(--button-bg);
+    /* matches your blue */
+}
+
+.card li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
