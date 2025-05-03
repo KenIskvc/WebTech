@@ -5,12 +5,22 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* background-color: #242424; */
+  background-color:  #4a5568;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --text-6xl: 3rem;
+  --text-6xl-line-height: 1;
+  --color-st-blue: #3a8dff;
+  --color-st-lightblue: #e6f0ff;
+  --color-st-antiwhite: #f5f7fa;
+  --color-st-gray: #4a5568;
+  --color-st-lightgray: #a0aec0;
+  --color-st-red: #ff6b6b;
 }
 
 a {
@@ -18,6 +28,7 @@ a {
   color: #646cff;
   text-decoration: inherit;
 }
+
 a:hover {
   color: #535bf2;
 }
@@ -31,8 +42,9 @@ body {
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-size: var(--text-6xl);
+  line-height: var(--text-6xl--line-height);
+  font-weight: 600;
 }
 
 #app {
@@ -70,12 +82,16 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  /* background-color: #1a1a1a; */
+  background-color:var(--color-st-lightblue);
   cursor: pointer;
   transition: border-color 0.25s;
+  color: var(--color-st-gray);
 }
 button:hover {
-  border-color: #646cff;
+  /* border-color: #646cff; */
+  border-color: var(--color-st-blue);
+
 }
 button:focus,
 button:focus-visible {
