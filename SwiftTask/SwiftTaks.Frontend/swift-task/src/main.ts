@@ -1,9 +1,12 @@
 import loginPageHtml from './pages/login/login.html?raw';
 import "./style.css";
-import typescriptLogo from "./typescript.svg";
-import viteLogo from "/vite.svg";
 import swifttaskLogo from "/swifttask-icon.png";
-import { setupCounter } from "./counter.ts";
+import { setupRoutes } from "./router";
+// import typescriptLogo from "./typescript.svg";
+// import viteLogo from "/vite.svg";
+// import { setupCounter } from "./counter.ts";
+
+setupRoutes();
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <div>    

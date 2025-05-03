@@ -26,6 +26,7 @@ namespace SwiftTask.Backend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Task>>> GetTasks()
         {
+            //return await _context.Tasks.Include(t => t.Topic).ToListAsync();
             return await _context.Tasks.ToListAsync();
         }
 

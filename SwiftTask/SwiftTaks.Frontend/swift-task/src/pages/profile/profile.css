@@ -1,1 +1,5 @@
-@import url('../../style.css');
+.profile-card{
+    background-color: var(--color-st-lightgray);
+    padding: 20px 20px;
+    border-radius: 8px;
+}

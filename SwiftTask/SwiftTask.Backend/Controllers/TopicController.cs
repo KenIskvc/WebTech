@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SwiftTask.Backend.DTOs;
 using SwiftTask.Backend.Infrastructure;
 using SwiftTask.Backend.Models;
 
@@ -23,9 +24,22 @@ namespace SwiftTask.Backend.Controllers
 
         // GET: api/Topic
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Topic>>> GetTopics()
+        public async Task<ActionResult<IEnumerable<TopicDto>>> GetTopics()
         {
-            return await _context.Topics.ToListAsync();
+            var topics = await _context.Topics.Include(t => t.Tasks).ToListAsync();
+
+            var topicDtos = topics.Select(topic => new TopicDto
+            {
+                Id = topic.Id,
+                Name = topic.Name,
+                Tasks = topic.Tasks.Select(task => new TaskDto
+                {
+                    Id = task.Id,
+                    Description = task.Description
+                }).ToList()
+            }).ToList();
+
+            return topicDtos;
         }
 
         // GET: api/Topic/5
