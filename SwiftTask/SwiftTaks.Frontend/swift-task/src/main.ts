@@ -1,4 +1,5 @@
-//import "./style.css";
+import loginPageHtml from './pages/login/login.html?raw';
+import "./style.css";
 import swifttaskLogo from "/swifttask-icon.png";
 import { setupRoutes } from "./router";
 // import typescriptLogo from "./typescript.svg";
@@ -14,7 +15,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     </a>
     <h1>Swift Task</h1>
     <div class="card">
-      <button type="button">Start</button>
+       <button id="start-btn" type="button">Start</button>
     </div>
     <p class="read-the-docs">
       Welcome to your personal To-Do List Manager 😊
@@ -31,3 +32,17 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
 //<button id="counter" type="button"></button>
 
 //setupCounter(document.querySelector<HTMLButtonElement>("#counter")!);
+
+
+document.getElementById("start-btn")?.addEventListener("click", () => {
+const startBtn = document.getElementById('start-btn')!;
+const app = document.querySelector<HTMLDivElement>('#app')!;
+
+startBtn.addEventListener('click', () => {
+  app.innerHTML = loginPageHtml;
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = '/src/pages/login/login.css';
+  document.head.append(link);
+});
+});
