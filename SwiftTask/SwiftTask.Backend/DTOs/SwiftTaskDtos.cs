@@ -6,6 +6,11 @@
         public string Name { get; init; }
         public List<TaskDto> Tasks { get; init; }
     }
+    public record TopicCreateDto
+    {
+        public string Name { get; init; }
+        public string SwiftTaskUserId { get; init; }
+    }
     public record TaskDto
     {
         public int Id { get; init; }

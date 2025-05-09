@@ -13,6 +13,7 @@ public class Topic
 
     public int Id { get; private set; }
     public string Name { get; set; }
+  
     public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
     public string SwiftTaskUserId { get; set; }
     public virtual SwiftTaskUser User { get; set; }

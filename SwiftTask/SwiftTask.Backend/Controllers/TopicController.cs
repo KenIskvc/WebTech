@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SwiftTask.Backend.DTOs;
 using SwiftTask.Backend.Infrastructure;
@@ -22,16 +17,44 @@ namespace SwiftTask.Backend.Controllers
             _context = context;
         }
 
-        // GET: api/Topic
+        // GET: api/Topic?userId=xyz
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TopicDto>>> GetTopics(string userId)
+        public async Task<ActionResult<IEnumerable<TopicDto>>> GetTopics([FromQuery] string userId)
         {
-            //var topics = await _context.Topics.WInclude(t => t.Tasks).ToListAsync();
-            var topics = await _context.Topics.Where(t => t.SwiftTaskUserId.Equals(userId))
-                .Include(t => t.Tasks).ToListAsync();
-                
+            if (string.IsNullOrEmpty(userId))
+                return BadRequest("Missing userId");
 
-            var topicDtos = topics.Select(topic => new TopicDto
+            var topics = await _context.Topics
+                .Where(t => t.SwiftTaskUserId == userId)
+                .Include(t => t.Tasks)
+                .ToListAsync();
+
+            var topicDtos = topics.Select(t => new TopicDto
+            {
+                Id = t.Id,
+                Name = t.Name,
+                Tasks = t.Tasks.Select(task => new TaskDto
+                {
+                    Id = task.Id,
+                    Description = task.Description
+                }).ToList()
+            }).ToList();
+
+            return Ok(topicDtos);
+        }
+
+        // GET: api/Topic/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TopicDto>> GetTopic(int id)
+        {
+            var topic = await _context.Topics
+                .Include(t => t.Tasks)
+                .FirstOrDefaultAsync(t => t.Id == id);
+
+            if (topic == null)
+                return NotFound();
+
+            var dto = new TopicDto
             {
                 Id = topic.Id,
                 Name = topic.Name,
@@ -40,76 +63,70 @@ namespace SwiftTask.Backend.Controllers
                     Id = task.Id,
                     Description = task.Description
                 }).ToList()
-            }).ToList();
+            };
 
-            return topicDtos;
-        }
-
-        // GET: api/Topic/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Topic>> GetTopic(int id)
-        {
-            var topic = await _context.Topics.FindAsync(id);
-
-            if (topic == null)
-            {
-                return NotFound();
-            }
-
-            return topic;
-        }
-
-        // PUT: api/Topic/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTopic(int id, Topic topic)
-        {
-            if (id != topic.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(topic).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TopicExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(dto);
         }
 
         // POST: api/Topic
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Topic>> PostTopic(Topic topic)
+        public async Task<ActionResult<TopicDto>> PostTopic([FromBody] TopicCreateDto dto)
         {
+            if (string.IsNullOrWhiteSpace(dto.Name))
+                return BadRequest("Topic name is required.");
+
+            if (string.IsNullOrWhiteSpace(dto.SwiftTaskUserId))
+                return BadRequest("User ID is required.");
+
+            var topic = new Topic
+            {
+                Name = dto.Name,
+                SwiftTaskUserId = dto.SwiftTaskUserId,
+                Tasks = new List<Models.Task>()
+            };
+
             _context.Topics.Add(topic);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTopic", new { id = topic.Id }, topic);
+            var result = new TopicDto
+            {
+                Id = topic.Id,
+                Name = topic.Name,
+                Tasks = new List<TaskDto>()
+            };
+
+            return CreatedAtAction(nameof(GetTopic), new { id = topic.Id }, result);
+        }
+
+        // PUT: api/Topic/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutTopic(int id, [FromBody] TopicDto dto)
+        {
+            if (id != dto.Id)
+                return BadRequest("ID mismatch.");
+
+            var topic = await _context.Topics.FindAsync(id);
+            if (topic == null)
+                return NotFound();
+
+            topic.Name = dto.Name;
+
+            _context.Entry(topic).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
         // DELETE: api/Topic/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTopic(int id)
         {
-            var topic = await _context.Topics.FindAsync(id);
+            var topic = await _context.Topics
+                .Include(t => t.Tasks)
+                .FirstOrDefaultAsync(t => t.Id == id);
+
             if (topic == null)
-            {
                 return NotFound();
-            }
 
             _context.Topics.Remove(topic);
             await _context.SaveChangesAsync();
