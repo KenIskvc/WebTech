@@ -24,9 +24,12 @@ namespace SwiftTask.Backend.Controllers
 
         // GET: api/Topic
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TopicDto>>> GetTopics()
+        public async Task<ActionResult<IEnumerable<TopicDto>>> GetTopics(string userId)
         {
-            var topics = await _context.Topics.Include(t => t.Tasks).ToListAsync();
+            //var topics = await _context.Topics.WInclude(t => t.Tasks).ToListAsync();
+            var topics = await _context.Topics.Where(t => t.SwiftTaskUserId.Equals(userId))
+                .Include(t => t.Tasks).ToListAsync();
+                
 
             var topicDtos = topics.Select(topic => new TopicDto
             {
