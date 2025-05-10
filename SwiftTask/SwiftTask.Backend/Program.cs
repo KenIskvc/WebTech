@@ -28,9 +28,9 @@ using( var scope = app.Services.CreateScope() )
     var context = services.GetRequiredService<SwiftTaskDbContext>();
     var userManager = services.GetRequiredService<UserManager<SwiftTaskUser>>();
 
-    context.Database.EnsureDeleted();
-    context.Database.EnsureCreated();
-    context.Seed( userManager );
+    //context.Database.EnsureDeleted();
+    //context.Database.EnsureCreated();
+    //context.Seed( userManager );
 }
 // Configure the HTTP request pipeline.
 if( app.Environment.IsDevelopment() )

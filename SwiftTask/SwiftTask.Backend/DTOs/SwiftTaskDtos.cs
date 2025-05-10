@@ -9,7 +9,7 @@
     public record TopicCreateDto
     {
         public string Name { get; init; }
-        public string SwiftTaskUserId { get; init; }
+        public string UserId { get; init; }
     }
     public record TaskDto
     {
