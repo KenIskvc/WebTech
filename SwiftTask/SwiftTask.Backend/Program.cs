@@ -15,10 +15,59 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<SwiftTaskDbContext>(
     options => options.UseSqlServer( "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=SwiftTask;Integrated Security=True;Trust Server Certificate=True;" ) );
 
+//builder.Services.AddAuthentication( CookieAuthenticationDefaults.AuthenticationScheme )
+//    .AddCookie( options =>
+//    {
+//        options.LoginPath = "/login";
+//        options.Cookie.HttpOnly = true;
+//        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+//        options.Cookie.SameSite = SameSiteMode.Lax;
+//        options.SlidingExpiration = true;
+//    } );
+
 builder.Services.AddAuthorization();
 
 builder.Services.AddIdentityApiEndpoints<SwiftTaskUser>()
     .AddEntityFrameworkStores<SwiftTaskDbContext>();
+
+builder.Services.AddCors( options =>
+{
+    options.AddPolicy( "AllowFrontend", builder =>
+    {
+        builder.WithOrigins( "http://localhost:5173" )
+            .AllowCredentials()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    } );
+} );
+
+builder.Services.AddSwaggerGen( options =>
+{
+    options.AddSecurityDefinition( "Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Enter your JWT token in the format: Bearer {token}"
+    } );
+
+    options.AddSecurityRequirement( new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            []
+        }
+    } );
+} );
 
 var app = builder.Build();
 
@@ -43,10 +92,10 @@ app.UseDefaultFiles();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseCors( "AllowFrontend" );
 app.UseAuthorization();
 app.MapIdentityApi<SwiftTaskUser>();
 app.MapControllers();
 
 app.MapGet( "api/helloWorld", () => "Hello World!" );
-
 app.Run();
