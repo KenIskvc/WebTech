@@ -15,6 +15,12 @@ export function setupRoutes() {
             const html = await fetch("/src/pages/profile/profile.html").then(res => res.text());
             document.getElementById("app")!.innerHTML = html;
             await loadPageAssets("profile");
+        },
+        login: async () => {
+            removePageAssets();
+            const html = await fetch("/src/pages/login/login.html").then(res => res.text());
+            document.getElementById("app")!.innerHTML = html;
+            await loadPageAssets("login");
         }
     }).resolve();
 }
