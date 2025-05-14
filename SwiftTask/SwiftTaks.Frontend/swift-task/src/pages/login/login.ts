@@ -1,9 +1,14 @@
 import Alpine from 'alpinejs';
+import { router } from '../../router';
 
-export function setupLogin() {
+console.log("login.ts");
+function setupLogin() {
+  console.log("✅ login.ts loaded");
   const form = document.getElementById('login-form') as HTMLFormElement;
 
+  console.log(form);
   form?.addEventListener('submit', async (e) => {
+    console.log('submitted.');
     e.preventDefault();
 
     const email = (document.getElementById('email') as HTMLInputElement).value;
@@ -20,17 +25,22 @@ export function setupLogin() {
       })
     });
 
+    console.log(res);
+
     if (res.ok) {
       const data = await res.json();
+      console.log(data);
       localStorage.setItem('accessToken', data.accessToken);
       localStorage.setItem('refreshToken', data.refreshToken);
       Alpine.store('auth').token = data.accessToken;
       Alpine.store('auth').refreshToken = data.refreshToken;
       Alpine.store('auth').isAuthenticated = true;
       await Alpine.store('auth').fetchUser();
-      window.location.hash = '/home';
+      router.navigate("/home");
     } else {
       alert('Login failed');
     }
   });
 }
+
+setupLogin(); 

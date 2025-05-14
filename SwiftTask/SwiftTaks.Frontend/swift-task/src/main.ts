@@ -1,6 +1,4 @@
-import loginPageHtml from './pages/login/login.html?raw';
 import "./style.css";
-import swifttaskLogo from "/swifttask-icon.png";
 import { setupRoutes } from "./router";
 import Alpine from 'alpinejs';
 
@@ -11,7 +9,6 @@ declare global {
 }
 
 window.Alpine = Alpine;
-
 Alpine.store('auth', {
   token: localStorage.getItem('accessToken'),
   refreshToken: localStorage.getItem('refreshToken'),
@@ -69,7 +66,8 @@ Alpine.store('auth', {
     window.location.hash = '/login';
   }
 });
-
 Alpine.start();
+
+await Alpine.store('auth').init();
 
 setupRoutes();
