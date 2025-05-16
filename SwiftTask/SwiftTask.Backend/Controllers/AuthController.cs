@@ -4,35 +4,33 @@ using Microsoft.AspNetCore.Mvc;
 using SwiftTask.Backend.Models;
 
 namespace SwiftTask.Backend.Controllers;
-[Route( "[controller]" )]
+
+// AuthController handles authenticated user-related endpoints.
+[Route("[controller]")]
 [ApiController]
-public class AuthController : ControllerBase
-{
+public class AuthController : ControllerBase {
     private readonly UserManager<SwiftTaskUser> _userManager;
 
-    public AuthController( UserManager<SwiftTaskUser> userManager )
-    {
-        _userManager = userManager;
-    }
+    public AuthController(UserManager<SwiftTaskUser> userManager) => _userManager = userManager;
 
-    [HttpGet( "/me" )]
+    // Returns the currently authenticated user's basic information (Id, UserName, Email).
+    // Requires the user to be authenticated via [Authorize] attribute.
+    // Returns 401 Unauthorized if the user is not authenticated.
+    [HttpGet("/me")]
     [Authorize]
-    public async Task<ActionResult> GetUser()
-    {
-        if( User?.Identity?.IsAuthenticated != true )
+    public async Task<ActionResult> GetUser() {
+        if(User?.Identity?.IsAuthenticated != true)
             return Unauthorized();
 
-        var user = await _userManager.GetUserAsync( User );
-        var anotherUser = await _userManager.FindByIdAsync( user.Id );
+        var user = await _userManager.GetUserAsync(User);
+        var anotherUser = await _userManager.FindByIdAsync(user.Id);
 
-        if( user == null )
-            return Unauthorized();
-
-        return Ok( new
-        {
-            user.Id,
-            user.UserName,
-            user.Email
-        } );
+        return user == null
+            ? Unauthorized()
+            : Ok(new {
+                user.Id,
+                user.UserName,
+                user.Email
+            });
     }
 }
