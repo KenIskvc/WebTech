@@ -1,30 +1,73 @@
 import "./style.css";
-import typescriptLogo from "./typescript.svg";
-import viteLogo from "/vite.svg";
-import swifttaskLogo from "/swifttask-icon.png";
-import { setupCounter } from "./counter.ts";
+import { setupRoutes } from "./router";
+import Alpine from 'alpinejs';
 
-document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
-  <div>    
-    <a href="#">
-      <img src="${swifttaskLogo}" class="logo vanilla" alt="SwitftTask logo" />
-    </a>
-    <h1>Swift Task</h1>
-    <div class="card">
-      <button type="button">Start</button>
-    </div>
-    <p class="read-the-docs">
-      Welcome to your personal To-Do List Manager 😊
-    </p>
-  </div>
-`;
+declare global {
+  interface Window {
+    Alpine: typeof Alpine;
+  }
+}
 
-// <a href="https://vite.dev" target="_blank">
-//       <img src="${viteLogo}" class="logo" alt="Vite logo" />
-//     </a>
-//     <a href="https://www.typescriptlang.org/" target="_blank">
-//       <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-//     </a>
-//<button id="counter" type="button"></button>
+window.Alpine = Alpine;
+Alpine.store('auth', {
+  token: localStorage.getItem('accessToken'),
+  refreshToken: localStorage.getItem('refreshToken'),
+  user: null,
+  isAuthenticated: false,
 
-//setupCounter(document.querySelector<HTMLButtonElement>("#counter")!);
+  async init() {
+    if (this.token) {
+      this.isAuthenticated = true;
+      await this.fetchUser();
+    }
+  },
+
+  async fetchUser() {
+    const res = await fetch('https://localhost:7050/me', {
+      headers: { Authorization: `Bearer ${this.token}` }
+    });
+
+    if (res.ok) {
+      this.user = await res.json();
+    } else {
+      await this.tryRefreshToken();
+    }
+  },
+
+  async tryRefreshToken() {
+    const refreshToken = this.refreshToken;
+    if (!refreshToken) return this.logout();
+
+    const res = await fetch('https://localhost:7050/refresh', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refreshToken })
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      this.token = data.accessToken;
+      this.refreshToken = data.refreshToken;
+      localStorage.setItem('accessToken', this.token);
+      localStorage.setItem('refreshToken', this.refreshToken);
+      this.isAuthenticated = true;
+      await this.fetchUser();
+    } else {
+      this.logout();
+    }
+  },
+
+  logout() {
+    this.token = null;
+    this.refreshToken = null;
+    this.user = null;
+    this.isAuthenticated = false;
+    localStorage.clear();
+    window.location.hash = '/login';
+  }
+});
+Alpine.start();
+
+await Alpine.store('auth').init();
+
+setupRoutes();
