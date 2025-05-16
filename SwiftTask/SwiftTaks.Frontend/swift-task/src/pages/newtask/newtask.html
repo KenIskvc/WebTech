@@ -1,0 +1,34 @@
+<div>
+  <h1>New Task</h1>
+  <div class="task-card">
+    <form id="newTaskForm">
+      <label>
+        Description
+        <input type="text" name="description" id="description" required />
+      </label>
+
+      <label>
+        Topic
+        <select name="topicName" id="topicName" required>
+          <option value="">-- select topic --</option>
+          <!-- dynamically populated -->
+        </select>
+      </label>
+
+      <label>
+        Completed
+        <input type="checkbox" name="isDone" id="isDone" />
+      </label>
+
+      <div class="buttons">
+        <button type="submit">Save Task</button>
+        <button type="button" id="cancelBtn">Cancel</button>
+      </div>
+
+      <div id="error" class="error"></div>
+    </form>
+  </div>
+
+  <script type="module" src="./newtask.ts"></script>
+  <link rel="stylesheet" href="./newtask.css" />
+</div>

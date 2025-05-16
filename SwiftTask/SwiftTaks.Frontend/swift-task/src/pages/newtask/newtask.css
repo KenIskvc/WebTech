@@ -1,0 +1,48 @@
+.task-card {
+  background-color: var(--color-st-lightgray);
+  padding: 20px 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  margin: 1rem auto;
+}
+
+.task-card h1 {
+  margin-bottom: 1rem;
+}
+
+.task-card label {
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.task-card input[type="text"],
+.task-card select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+}
+
+.task-card .buttons {
+  margin-top: 1rem;
+  display: flex;
+  gap: 10px;
+}
+
+.task-card button {
+  padding: 0.5rem 1rem;
+  background-color: var(--button-bg);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+.task-card button:hover {
+  background-color: var(--button-hover);
+}
+
+.error {
+  color: red;
+  margin-top: 0.5rem;
+}
