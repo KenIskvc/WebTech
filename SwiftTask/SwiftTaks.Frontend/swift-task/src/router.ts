@@ -43,9 +43,17 @@ async function loadPage(page: string) {
   css.id = "page-style";
   document.head.appendChild(css);
 
+  const pageModules = import.meta.glob<{ default?: () => void }>('./pages/**/*.ts');
+  const path = `./pages/${page}/${page}.ts`;
+
   try {
-    const module = await import(`/src/pages/${page}/${page}.ts`);
-    module.default?.();
+    const moduleLoader = pageModules[path];
+    if (moduleLoader) {
+      const module = await moduleLoader();
+      module.default?.();
+    } else {
+      console.warn(`No module found for ${path}`);
+    }
   } catch (e) {
     console.error(`Failed to load page logic for ${page}:`, e);
   }

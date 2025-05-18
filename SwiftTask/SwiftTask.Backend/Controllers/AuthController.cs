@@ -19,18 +19,25 @@ public class AuthController : ControllerBase {
     [HttpGet("/me")]
     [Authorize]
     public async Task<ActionResult> GetUser() {
-        if(User?.Identity?.IsAuthenticated != true)
+        if (User?.Identity?.IsAuthenticated != true)
             return Unauthorized();
+        try
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var anotherUser = await _userManager.FindByIdAsync(user.Id);
 
-        var user = await _userManager.GetUserAsync(User);
-        var anotherUser = await _userManager.FindByIdAsync(user.Id);
-
-        return user == null
-            ? Unauthorized()
-            : Ok(new {
-                user.Id,
-                user.UserName,
-                user.Email
-            });
+            return user == null
+                ? Unauthorized()
+                : Ok(new {
+                    user.Id,
+                    user.UserName,
+                    user.Email
+                });
+        } catch (Exception ex)
+        {
+            await Console.Out.WriteLineAsync(ex.Message);
+            return Unauthorized();
+        }
+        
     }
 }
