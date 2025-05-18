@@ -15,6 +15,8 @@ public class TaskController : ControllerBase {
     // GET: api/Task
     // Retrieves a list of all tasks from the database.
     [HttpGet]
+
+
     public async Task<ActionResult<IEnumerable<Task>>> GetTasks() =>
         //return await _context.Tasks.Include(t => t.Topic).ToListAsync();
         await _context.Tasks.ToListAsync();
