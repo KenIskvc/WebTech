@@ -15,16 +15,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<SwiftTaskDbContext>(
     options => options.UseSqlServer( "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=SwiftTask;Integrated Security=True;Trust Server Certificate=True;" ) );
 
-//builder.Services.AddAuthentication( CookieAuthenticationDefaults.AuthenticationScheme )
-//    .AddCookie( options =>
-//    {
-//        options.LoginPath = "/login";
-//        options.Cookie.HttpOnly = true;
-//        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-//        options.Cookie.SameSite = SameSiteMode.Lax;
-//        options.SlidingExpiration = true;
-//    } );
-
 builder.Services.AddAuthorization();
 
 builder.Services.AddIdentityApiEndpoints<SwiftTaskUser>()
@@ -77,9 +67,9 @@ using( var scope = app.Services.CreateScope() )
     var context = services.GetRequiredService<SwiftTaskDbContext>();
     var userManager = services.GetRequiredService<UserManager<SwiftTaskUser>>();
 
-    context.Database.EnsureDeleted();
-    context.Database.EnsureCreated();
-    context.Seed( userManager );
+    //context.Database.EnsureDeleted();
+    //context.Database.EnsureCreated();
+    //context.Seed( userManager );
 }
 // Configure the HTTP request pipeline.
 if( app.Environment.IsDevelopment() )
