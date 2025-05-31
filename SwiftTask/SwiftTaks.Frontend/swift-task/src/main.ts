@@ -1,6 +1,7 @@
 import "./style.css";
 import { setupRoutes } from "./router";
 import Alpine from 'alpinejs';
+import { router } from "./router";
 
 declare global {
   interface Window {
@@ -63,7 +64,7 @@ Alpine.store('auth', {
     this.user = null;
     this.isAuthenticated = false;
     localStorage.clear();
-    window.location.hash = '/login';
+    router.navigate("/login")
   }
 });
 Alpine.start();
