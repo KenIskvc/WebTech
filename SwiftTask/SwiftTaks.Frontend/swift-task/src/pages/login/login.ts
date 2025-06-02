@@ -38,6 +38,8 @@ function setupLogin() {
       await Alpine.store('auth').fetchUser();
       router.navigate("/home");
     } else {
+      const errText = await res.text();
+      console.log(errText);
       alert('Login failed');
     }
   });

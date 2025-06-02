@@ -1,0 +1,25 @@
+<div class="signup-container">
+  <div class="signup-card">
+    <img src="/swifttask-icon.png" class="logo vanilla" alt="SwiftTask logo" />
+    <h3>Sign up to SwiftTask</h3>
+    <div class="signup-form-container">
+      <form class="signup-form" id="signup-form">
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <input type="password" id="confirm_password" placeholder="Confirm Password" required />
+        <button type="submit">Sign up</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="signup-result-card" style="display: none;">
+    <div class="signup-result-box">
+      <h3 id="signup-title">Result</h3>
+      <p id="signup-message"></p>
+    </div>
+    <div class="result-link-box">
+      <a href="/login" id="signup-login-link" style="display: none;">Go to Login</a>
+      <a href="/signup" id="signup-retry-link" style="display: none;">Try Again</a>
+    </div>
+  </div>
+</div>

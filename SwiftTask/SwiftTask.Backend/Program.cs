@@ -17,8 +17,26 @@ builder.Services.AddDbContext<SwiftTaskDbContext>(
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddIdentityApiEndpoints<SwiftTaskUser>()
-    .AddEntityFrameworkStores<SwiftTaskDbContext>();
+builder.Services
+    .AddIdentityCore<SwiftTaskUser>(options =>
+    {
+        options.Password.RequireDigit = false;
+        options.Password.RequiredLength = 5;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequiredUniqueChars = 0;
+        options.SignIn.RequireConfirmedEmail = false;
+        options.Lockout.AllowedForNewUsers = false;
+        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.Zero;
+    })
+    .AddEntityFrameworkStores<SwiftTaskDbContext>()
+    .AddSignInManager();
+
+builder.Services.AddIdentityApiEndpoints<SwiftTaskUser>();
+
+/*builder.Services.AddIdentityApiEndpoints<SwiftTaskUser>()
+    .AddEntityFrameworkStores<SwiftTaskDbContext>();*/
 
 builder.Services.AddCors( options =>
 {
@@ -67,12 +85,12 @@ using( var scope = app.Services.CreateScope() )
     var context = services.GetRequiredService<SwiftTaskDbContext>();
     var userManager = services.GetRequiredService<UserManager<SwiftTaskUser>>();
 
-    //context.Database.EnsureDeleted();
-    //context.Database.EnsureCreated();
-    //context.Seed( userManager );
+    context.Database.EnsureDeleted();
+    context.Database.EnsureCreated();
+    context.Seed(userManager);
 }
 // Configure the HTTP request pipeline.
-if( app.Environment.IsDevelopment() )
+if ( app.Environment.IsDevelopment() )
 {
     app.UseSwagger();
     app.UseSwaggerUI();
