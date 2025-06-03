@@ -1,5 +1,4 @@
-import Alpine from "alpinejs";
-import { router } from "../../router";
+import AuthService from "../../services/auth-service";
 
 console.log("✅ signup.ts module loaded");
 
@@ -39,31 +38,26 @@ export default function () {
     const email = emailInput.value;
     const password = passwordInput.value;
 
-    const res = await fetch("https://localhost:7050/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+    const success : boolean = await AuthService.singupAsync(email, password);
 
+    console.log(success);
+    
     signupCard.style.display = "none";
     resultCard.style.display = "flex";
 
-    if (res.ok) {
-      console.log(res);
+    if (success) {
       title.textContent = "Success";
-      message.textContent = "You've signed up successfully. Please proceed to login.";
+      message.textContent =
+        "You've signed up successfully. Please proceed to login.";
       loginLink.style.display = "inline";
       retryLink.style.display = "none";
       resultBox.classList.add("success");
     } else {
-      const errorText = await res.text();
-      console.log(errorText);
       title.textContent = "Error";
       message.textContent = `Signup failed.`;
       loginLink.style.display = "none";
       retryLink.style.display = "inline";
       resultBox.classList.add("error");
     }
-
   });
 }

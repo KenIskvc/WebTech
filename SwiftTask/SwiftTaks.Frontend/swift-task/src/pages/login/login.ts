@@ -1,5 +1,5 @@
-import Alpine from 'alpinejs';
 import { router } from '../../router';
+import AuthService from '../../services/auth-service';
 
 console.log("login.ts");
 function setupLogin() {
@@ -14,33 +14,12 @@ function setupLogin() {
     const email = (document.getElementById('email') as HTMLInputElement).value;
     const password = (document.getElementById('password') as HTMLInputElement).value;
 
-    const res = await fetch('https://localhost:7050/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
-        email: email, 
-        password: password,
-        twoFactorCode: '',
-        twoFactorRecoveryCode: ''
-      })
-    });
+    const success = await AuthService.loginAsync(email, password);
 
-    console.log(res);
-
-    if (res.ok) {
-      const data = await res.json();
-      console.log(data);
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('refreshToken', data.refreshToken);
-      Alpine.store('auth').token = data.accessToken;
-      Alpine.store('auth').refreshToken = data.refreshToken;
-      Alpine.store('auth').isAuthenticated = true;
-      await Alpine.store('auth').fetchUser();
+    if (success) {
       router.navigate("/home");
     } else {
-      const errText = await res.text();
-      console.log(errText);
-      alert('Login failed');
+      alert('Login failed. Please check your credentials.');
     }
   });
 }
