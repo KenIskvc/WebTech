@@ -21,6 +21,12 @@ export function setupRoutes() {
     login: async () => {
       await loadPage("login");
     },
+    signup: async () => {
+      await loadPage("signup");
+    },
+    sst: async() => {
+      await loadPage("sst")
+    },
 
     home: () => authGuard(() => loadPage("home")),
     profile: () => authGuard(() => loadPage("profile"))
