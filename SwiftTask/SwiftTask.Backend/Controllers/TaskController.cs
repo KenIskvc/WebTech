@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using SwiftTask.Backend.Infrastructure;
 using Task = SwiftTask.Backend.Models.Task;
+using SwiftTask.Backend.DTOs;
+
 
 namespace SwiftTask.Backend.Controllers;
 
@@ -12,33 +14,82 @@ public class TaskController : ControllerBase {
 
     public TaskController(SwiftTaskDbContext context) => _context = context;
 
-    // GET: api/Task
-    // Retrieves a list of all tasks from the database.
+    public record UpdateTaskDto(string Description, bool IsDone, string TopicName);
+    public record CreateTaskDto(string Description, string TopicName);
 
+    // GET: api/Task
+    
     /// <summary>
     /// Retrieves a list of all tasks.
     /// </summary>
     /// <returns>A list of tasks</returns>
     [HttpGet]
 
-    public async Task<ActionResult<IEnumerable<Task>>> GetTasks() =>
-        //return await _context.Tasks.Include(t => t.Topic).ToListAsync();
-        await _context.Tasks.ToListAsync();
+    public async Task<ActionResult<IEnumerable<TaskDto>>> GetAllTasks()
+    {
+        var list = await _context.Tasks
+            .Include(t => t.Topic)
+            .Select(t => new TaskDto
+            {
+                Id = t.Id,
+                Description = t.Description,
+                IsDone = t.IsDone,
+                TopicName = t.Topic.Name
+            })
+            .ToListAsync();
+        return Ok(list);
 
-    // GET: api/Task/5
-    // Retrieves a single task by its ID. Returns 404 if not found.
-
+    }
     /// <summary>
-    /// Retrieves a task by its ID.
+    /// Retrieves all tasks by a specific topic name.
     /// </summary>
-    /// <param name="id">Task ID</param>
-    /// <returns>The task or 404 Not Found</returns>
+    /// <param name="topicName">The name of the topic.</param>
+    /// <returns>A list of tasks matching the topic name.</returns>
     
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Task>> GetTask(int id) {
-        var task = await _context.Tasks.FindAsync(id);
 
-        return task == null ? (ActionResult<Task>) NotFound() : (ActionResult<Task>) task;
+    [HttpGet("topic/{topicName}")]
+
+      public async Task<ActionResult<IEnumerable<TaskDto>>> GetTasksByTopic(string topicName)
+        {
+            var list = await _context.Tasks
+                .Include(t => t.Topic)
+                .Where(t => t.Topic.Name == topicName)
+                .Select(t => new TaskDto
+                {
+                    Id = t.Id,
+                    Description = t.Description,
+                    IsDone = t.IsDone,
+                    TopicName = t.Topic.Name
+                })
+                .ToListAsync();
+            return Ok(list);
+        }
+
+        // GET: api/Task/5
+        // Retrieves a single task by its ID. Returns 404 if not found.
+
+        /// <summary>
+        /// Retrieves a task by its ID.
+        /// </summary>
+        /// <param name="id">Task ID</param>
+        /// <returns>The task or 404 Not Found</returns>
+
+        [HttpGet("{id}")]
+    public async Task<ActionResult<TaskDto>> GetTask(int id)
+    {
+        var t = await _context.Tasks
+            .Include(x => x.Topic)
+            .SingleOrDefaultAsync(x => x.Id == id);
+        if (t == null) return NotFound();
+
+        var dto = new TaskDto
+        {
+            Id = t.Id,
+            Description = t.Description,
+            IsDone = t.IsDone,
+            TopicName = t.Topic.Name
+        };
+        return Ok(dto);
     }
 
     // PUT: api/Task/5
@@ -50,11 +101,30 @@ public class TaskController : ControllerBase {
     /// Updates a task by its ID.
     /// </summary>
     /// <param name="id">Task ID</param>
-    /// <param name="task">Updated task data</param>
+    /// <param name="dto">Updated task data</param>  
     /// <returns>204 No Content, 400 Bad Request, or 404 Not Found</returns>
 
+
+
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutTask(int id, Task task) {
+
+    public async Task<IActionResult> PutTask(int id, [FromBody] UpdateTaskDto dto)
+    {
+        var task = await _context.Tasks.FindAsync(id);
+        if (task == null) return NotFound();
+
+        var topic = await _context.Topics.SingleOrDefaultAsync(t => t.Name == dto.TopicName);
+        if (topic == null) return BadRequest($"Topic '{dto.TopicName}' not found");
+
+        task.Description = dto.Description;
+        task.IsDone = dto.IsDone;
+        task.TopicId = topic.Id;
+
+        await _context.SaveChangesAsync();
+        return NoContent();
+    }
+
+    /*public async Task<IActionResult> PutTask(int id, Task task) {
         if(id != task.Id) {
             return BadRequest();
         }
@@ -72,7 +142,7 @@ public class TaskController : ControllerBase {
         }
 
         return NoContent();
-    }
+    }*/
 
     // POST: api/Task
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -81,17 +151,46 @@ public class TaskController : ControllerBase {
     /// <summary>
     /// Creates a new task.
     /// </summary>
-    /// <param name="task">Task data</param>
+    /// <param name="dto">Task data</param>
     /// <returns>The created task with its ID</returns>
 
+
+
     [HttpPost]
-    public async Task<ActionResult<Task>> PostTask(Task task) {
+
+    public async Task<ActionResult<TaskDto>> PostTask([FromBody] CreateTaskDto dto)
+    {
+        var topic = await _context.Topics.SingleOrDefaultAsync(t => t.Name == dto.TopicName);
+        if (topic == null) return BadRequest($"Topic '{dto.TopicName}' not found");
+
+        var entity = new Task
+        {
+            Description = dto.Description,
+            TopicId = topic.Id,
+            IsDone = false
+        };
+
+        _context.Tasks.Add(entity);
+        await _context.SaveChangesAsync();
+
+        var result = new TaskDto
+        {
+            Id = entity.Id,
+            Description = entity.Description,
+            IsDone = entity.IsDone,
+            TopicName = dto.TopicName
+        };
+
+        return CreatedAtAction(nameof(GetTask), new { id = result.Id }, result);
+    }
+
+    /*public async Task<ActionResult<Task>> PostTask(Task task) {
         _context.Tasks.Add(task);
         await _context.SaveChangesAsync();
 
         return CreatedAtAction("GetTask", new { id = task.Id }, task);
     }
-
+    */
     // DELETE: api/Task/5
     // Deletes a task by its ID. Returns 404 if task not found.
 
@@ -100,11 +199,13 @@ public class TaskController : ControllerBase {
     /// </summary>
     /// <param name="id">Task ID</param>
     /// <returns>204 No Content or 404 Not Found</returns>
-    
+
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteTask(int id) {
+    public async Task<IActionResult> DeleteTask(int id)
+    {
         var task = await _context.Tasks.FindAsync(id);
-        if(task == null) {
+        if (task == null)
+        {
             return NotFound();
         }
 
