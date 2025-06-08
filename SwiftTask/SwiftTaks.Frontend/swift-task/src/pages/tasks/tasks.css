@@ -1,0 +1,24 @@
+
+.tasks-page {
+  padding: 20px;
+  color: var(--color-st-gray);
+}
+
+.tasks-page h2 {
+  margin-bottom: 16px;
+  color: var(--color-st-blue);
+  font-size: 24px;
+}
+
+.task-item {
+  padding: 10px;
+  border: 1px solid var(--color-st-lightgray);
+  border-radius: 6px;
+  margin-bottom: 10px;
+  background-color: var(--color-st-antiwhite);
+}
+
+.task-item.completed {
+  text-decoration: line-through;
+  background-color: var(--color-st-lightblue);
+}

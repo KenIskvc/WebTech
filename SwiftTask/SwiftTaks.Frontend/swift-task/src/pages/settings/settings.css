@@ -1,0 +1,17 @@
+.settings-wrapper {
+  background-color: var(--color-st-antiwhite);
+  padding: 2rem;
+  border-radius: var(--radius-md, 8px);
+  box-shadow: var(--shadow-sm, 0 2px 4px rgba(0, 0, 0, 0.05));
+  color: var(--color-st-gray);
+}
+
+.settings-wrapper h2 {
+  color: var(--color-st-blue);
+  margin-bottom: 1rem;
+}
+
+.settings-wrapper p {
+  font-size: 1rem;
+  color: var(--color-st-lightgray);
+}
