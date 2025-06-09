@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // TypeScript version of about.js
 /*export function renderAboutPage(container: HTMLElement, data: any): void {
     container.innerHTML = `
@@ -22,7 +21,6 @@
   `;
 }
 */
-=======
 // About Page – static info with placeholder team
 export function renderAboutPage(container: HTMLElement, _data: any): void {
   container.innerHTML = `
@@ -48,4 +46,3 @@ export function renderAboutPage(container: HTMLElement, _data: any): void {
     </section>
   `;
 }
->>>>>>> origin/main

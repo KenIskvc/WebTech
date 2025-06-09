@@ -42,6 +42,7 @@ try {
     }
 
     const data = await res.json();
+    console.log(data);
     localStorage.setItem('accessToken', data.accessToken);
     localStorage.setItem('refreshToken', data.refreshToken);
 
