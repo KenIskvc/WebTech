@@ -126,6 +126,22 @@ form {
 }
 
 
+/* Messages for empty states and errors */
+
+.no-topics,
+.error {
+    text-align: center;
+    padding: 1.5rem;
+    color: var(--color-st-gray);
+}
+
+.error {
+    color: var(--color-st-red);
+    background-color: rgba(255, 107, 107, 0.1);
+    border-radius: var(--radius-sm);
+}
+
+
 /* Responsive adjustments */
 
 @media (max-width: 767px) {

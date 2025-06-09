@@ -3,8 +3,10 @@
 export interface TopicDto {
   Id: number;
   Name: string;
+  SwiftTaskUserId?: string;
   Tasks?: TaskDto[];
-  // Additional properties from dummy data
+  // Frontend-only properties (not sent to backend)
+  // These properties are only used in the UI and not sent to the backend
   icon?: string;
   color?: string;
   autoDelete?: number;
@@ -12,12 +14,13 @@ export interface TopicDto {
 
 export interface TaskDto {
   Id: number;
-  Title: string;
+  Title?: string;      // Backend uses Description instead of Title in some cases
   Description?: string;
-  TopicId: number;
+  TopicId?: number;
   DueDate?: string;
-  IsDone: boolean;
+  IsDone?: boolean;
   Priority?: string;
+  TopicName?: string;  // Added to match backend DTO
 }
 
 export interface UserDto {
