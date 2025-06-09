@@ -28,9 +28,37 @@ export function mountLayout(): void {
         <button class="logout-btn"><span class="material-icons">logout</span> Logout</button>
       </aside>
 
-      <main id="app-content">
-        <!-- Page content will be injected here -->
-      </main>
+      <div class="content-wrapper" style="position: relative; flex-grow: 1;">
+        <div id="overlay" class="overlay"></div>
+        <main id="app-content"></main>
+      </div>
     </div>
   `;
+}
+
+export function setUpLayout(): void {
+  const burgerBtn = document.getElementById("burgerBtn");
+  const sidebar = document.querySelector(".sidebar");
+  const overlay = document.getElementById("overlay");
+  const content = document.getElementById("app-content");
+
+  if (!burgerBtn || !sidebar || !overlay || !content) {
+    console.warn("Burger menu setup failed.");
+    return;
+  }
+
+  burgerBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("open");
+    overlay.classList.toggle("show");
+  });
+
+  overlay.addEventListener("click", () => {
+    sidebar.classList.remove("open");
+    overlay.classList.remove("show");
+  });
+
+  content.addEventListener("click", () => {
+    sidebar.classList.remove("open");
+    overlay.classList.remove("show");
+  });
 }

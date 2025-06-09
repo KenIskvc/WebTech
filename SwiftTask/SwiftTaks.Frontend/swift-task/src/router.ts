@@ -1,8 +1,9 @@
+//router.ts
 import Navigo from "navigo";
-import { mountLayout } from "./components/layout/layout";
-
-
+import { mountLayout, setUpLayout } from "./components/layout/layout";
 const router = new Navigo("/");
+
+let layoutEventsBound = false;
 
 async function authGuard(next: () => void) {
   const auth = window.Alpine.store("auth");
@@ -17,41 +18,67 @@ async function authGuard(next: () => void) {
 }
 
 export function setupRoutes() {
-  mountLayout();
-
   router
     .on({
       "/": () => router.navigate("/home"),
 
-      login: async () => {
-        removeLayout();
-        await loadPage("login", false);
-      },
-      signup: async () => {
-        removeLayout();
-        await loadPage("signup", false);
-      },
-      sst: async () => {
-        removeLayout();
-        await loadPage("sst", false);
-      },
+      login: () => navigateTo("login", { layout: false }),
+      signup: () => navigateTo("signup", { layout: false }),
+      sst: () => navigateTo("sst", { layout: false }),
 
-      home: () => authGuard(() => loadPage("home", true)),
-      profile: () => authGuard(() => loadPage("profile", true)),
-      about: () => authGuard(() => loadPage("about", true)),
-      dashboard: () => authGuard(() => loadPage("dashboard", true)),
-      settings: () => authGuard(() => loadPage("settings", true)),
-      tasks: () => authGuard(() => loadPage("tasks", true)),
-      topics: () => authGuard(() => loadPage("topics", true)),
+      home: () => authGuard(() => navigateTo("home", { layout: true })),
+      profile: () => authGuard(() => navigateTo("profile", { layout: true })),
+      about: () => authGuard(() => navigateTo("about", { layout: true })),
+      dashboard: () =>
+        authGuard(() => navigateTo("dashboard", { layout: true })),
+      settings: () => authGuard(() => navigateTo("settings", { layout: true })),
+      tasks: () => authGuard(() => navigateTo("tasks", { layout: true })),
+      topics: () => authGuard(() => navigateTo("topics", { layout: true })),
+    })
+    .notFound(() => {
+      document.getElementById("app")!.innerHTML =
+        "<h1>404 - Page Not Found</h1>";
     })
     .resolve();
+  // router
+  //   .on({
+  //     "/": () => router.navigate("/home"),
 
-  router.notFound(() => {
-    document.getElementById("app")!.innerHTML = "<h1>404 - Page Not Found</h1>";
-  });
+  //     login: async () => {
+  //       removeLayout();
+  //       await loadPage("login", false);
+  //     },
+  //     signup: async () => {
+  //       removeLayout();
+  //       await loadPage("signup", false);
+  //     },
+  //     sst: async () => {
+  //       removeLayout();
+  //       await loadPage("sst", false);
+  //     },
+
+  //     home: () => authGuard(() => loadPage("home", true)),
+  //     profile: () => authGuard(() => loadPage("profile", true)),
+  //     about: () => authGuard(() => loadPage("about", true)),
+  //     dashboard: () => authGuard(() => loadPage("dashboard", true)),
+  //     settings: () => authGuard(() => loadPage("settings", true)),
+  //     tasks: () => authGuard(() => loadPage("tasks", true)),
+  //     topics: () => authGuard(() => loadPage("topics", true)),
+  //   })
+  //   .resolve();
+
+  // router.notFound(() => {
+  //   document.getElementById("app")!.innerHTML = "<h1>404 - Page Not Found</h1>";
+  // });
 }
 
-async function loadPage(page: string, useLayout = false) {
+export async function navigateTo(page: string, options?: { layout?: boolean }) {
+  const useLayout = options?.layout ?? false;
+
+   if (!useLayout) {
+    removeLayout();
+  }
+  
   removePageAssets();
 
   const css = document.createElement("link");
@@ -60,19 +87,39 @@ async function loadPage(page: string, useLayout = false) {
   css.id = "page-style";
   document.head.appendChild(css);
 
-  const html = await fetch(`/src/pages/${page}/${page}.html`).then((res) =>
-    res.text()
-  );
 
-  const target = useLayout
-    ? document.getElementById("app-content")
-    : document.getElementById("app");
-    
-  if (!target) return console.error("Target container not found");
+  const html = await fetch(`/src/pages/${page}/${page}.html`).then(res => res.text());
 
-  target.innerHTML = html;
+  let target: HTMLElement;
 
-  const pageModules = import.meta.glob<{ default?: () => void }>('./pages/**/*.ts');
+  if (useLayout) {
+    // Mount layout if not yet mounted
+    if (!document.getElementById("app-content")) {
+      mountLayout();
+      layoutEventsBound = false; // Reset so we can rebind
+    }
+
+    const appContent = document.getElementById("app-content")!;
+    const overlay = document.getElementById("overlay")!;
+
+    appContent.innerHTML = html;
+
+    // Reset sidebar/overlay state
+    document.querySelector(".sidebar")?.classList.remove("open");
+    overlay.classList.remove("show");
+
+    if (!layoutEventsBound) {
+      setUpLayout();
+      layoutEventsBound = true;
+    }
+
+    target = appContent;
+  } else {
+    target = document.getElementById("app")!;
+    target.innerHTML = html;
+  }
+
+  const pageModules = import.meta.glob<{ default?: () => void }>(`./pages/**/*.ts`);
   const path = `./pages/${page}/${page}.ts`;
 
   try {
@@ -80,8 +127,6 @@ async function loadPage(page: string, useLayout = false) {
     if (moduleLoader) {
       const module = await moduleLoader();
       module.default?.();
-    } else {
-      console.warn(`No module found for ${path}`);
     }
   } catch (e) {
     console.error(`Failed to load page logic for ${page}:`, e);
@@ -97,6 +142,7 @@ function removePageAssets() {
 
 function removeLayout() {
   document.getElementById("app")!.innerHTML = "";
+  layoutEventsBound = false;
 }
 
 export { router };
