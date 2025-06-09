@@ -1,15 +1,146 @@
+/* Topics page specific styles */
+
+.topics-container {
+    padding: 1rem;
+}
+
+#topicForm {
+    background-color: var(--color-st-antiwhite);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-md);
+    max-width: 600px;
+}
+
+#topicForm label {
+    display: block;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+#topicForm input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+}
+
+#topicForm input[type="color"] {
+    height: 42px;
+    padding: 0.25rem;
+}
+
+#topicForm input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+    outline: none;
+}
+
+#topic-submit-btn {
+    margin-top: 1.5rem;
+}
+
+#topicsList {
+    background-color: var(--card-bg-color);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    box-shadow: var(--shadow-md);
+}
+
+.topic-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color 0.2s;
+}
+
+.topic-item:hover {
+    background-color: var(--color-gray-light);
+}
+
+.topic-item:last-child {
+    border-bottom: none;
+}
+
+.topic-item .topic-icon {
+    margin-right: 0.75rem;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.topic-item .topic-name {
+    flex: 1;
+    font-weight: 500;
+}
+
+.topic-item .topic-stats {
+    margin: 0 0.75rem;
+    color: var(--color-text-light);
+    font-size: 0.85rem;
+}
+
+.topic-item .topic-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.topic-item .edit-topic-btn,
+.topic-item .delete-topic-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    padding: 0.25rem;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.topic-item .edit-topic-btn:hover {
+    background-color: var(--color-gray-light);
+}
+
+.topic-item .delete-topic-btn {
+    color: var(--color-red);
+}
+
+.topic-item .delete-topic-btn:hover {
+    background-color: rgba(255, 107, 107, 0.1);
+}
+
+
+/* Responsive adjustments */
+
+@media (max-width: 767px) {
+    #topicForm {
+        padding: 1rem;
+    }
+}
+
 .topic-card {
-  background-color: var(--color-st-antiwhite);
-  border-radius: 6px;
-  padding: 12px;
-  margin: 10px 0;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    background-color: var(--color-st-antiwhite);
+    border-radius: 6px;
+    padding: 12px;
+    margin: 10px 0;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .topic-card span.material-icons {
-  font-size: 28px;
-  color: var(--color-st-blue);
+    font-size: 28px;
+    color: var(--color-st-blue);
 }
