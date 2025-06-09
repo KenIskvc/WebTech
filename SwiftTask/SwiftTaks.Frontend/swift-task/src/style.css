@@ -24,6 +24,7 @@
     --color-st-lightgray: #a0aec0;
     --color-st-red: #ff6b6b;
     --color-border: #e9ecef;
+    --color-st-lightgray2: #ccc7c7;
     --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px rgba(22, 27, 29, 0.08), 0 1px 3px rgba(22, 27, 29, 0.1);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -31,6 +32,8 @@
     --radius-md: 8px;
     --radius-lg: 12px;
     --transition: all 0.2s ease;
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --border-radius-lg: 16px;
 }
 
 * {
@@ -156,6 +159,10 @@ body {
     padding: 0;
 }
 
+header {
+    height: 65px;
+}
+
 #app-content {
     /* Ensure main content can scroll if needed */
     min-height: 100vh;
@@ -181,20 +188,53 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 15px;
+    padding: 8px 15px;
     border-bottom: 1px solid var(--secondary-color);
     background: var(--bg-color);
+    min-height: 48px;
 }
 
 .header-left {
     display: flex;
     align-items: center;
+    gap: 8px;
 }
 
-.logo {
+.logo1 {
     font-size: 1.2em;
     font-weight: bold;
-    margin-left: 8px;
+    margin-left: 0px;
+}
+
+
+/* Buttons in header (burger and dark mode) */
+
+.burger-btn,
+.dark-toggle {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    min-height: 40px;
+}
+
+.burger-btn:hover,
+.dark-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.burger-btn:focus,
+.dark-toggle:focus {
+    outline: none;
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 
@@ -723,7 +763,7 @@ header {
     left: 0;
     width: 250px;
     height: 100%;
-    background: var(--color-st-lightgray);
+    background: var(--color-st-lightgray2);
     border-right: 1px solid var(--color-st-gray);
     display: flex;
     flex-direction: column;
@@ -885,12 +925,18 @@ header {
         border-radius: 8px;
     }
     header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
+        padding: 6px 12px;
+        min-height: 44px;
     }
     .burger-btn {
-        font-size: 1.25rem;
-        padding: 8px;
+        font-size: 1.1rem;
+        padding: 6px;
+    }
+    .logo1 {
+        font-size: 1.1em;
+    }
+    .dark-toggle {
+        font-size: 1.1rem;
+        padding: 6px;
     }
 }
