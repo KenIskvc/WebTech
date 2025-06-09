@@ -5,11 +5,14 @@
         public int Id { get; init; }
         public string Name { get; init; }
         public List<TaskDto> Tasks { get; init; }
+             
     }
     public record TaskDto
     {
         public int Id { get; init; }
         public string Description { get; init; }
+        public bool IsDone { get; init; }
+        public string TopicName { get; init; }
     }
 
     public record SwiftTaskUserDto
