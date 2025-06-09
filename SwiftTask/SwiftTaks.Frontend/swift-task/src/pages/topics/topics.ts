@@ -2,7 +2,7 @@
 import Alpine from 'alpinejs';
 import { router } from '../../router';
 import { fetchTopics, createTopic, updateTopic, deleteTopic } from '../../services/topic-service';
-import { TopicDto } from '../../types/dtos';
+//import { TopicDto } from '../../types/dtos';
 
 // Interface for the form data
 interface TopicFormData {
