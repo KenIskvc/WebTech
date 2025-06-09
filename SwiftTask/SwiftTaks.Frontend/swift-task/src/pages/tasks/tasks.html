@@ -1,5 +1,38 @@
-
-<div class="tasks-page">
-  <h2>Tasks</h2>
-  <div id="tasksContainer"></div>
+<section class="tasks-page">
+  <h2>New Task</h2>
+  <form id="taskForm">
+   <label for="taskTitle">Title:</label>
+<div class="voice-input-wrapper">
+  <input type="text" id="taskTitle" name="title" maxlength="50" required placeholder="Type or use microphone..." />
+  <button type="button" id="micBtn" title="Use microphone to fill in title">🎤</button>
 </div>
+
+    <label for="taskDescription">Description:</label>
+    <textarea id="taskDescription" name="description" maxlength="200" rows="3"></textarea>
+
+    <label for="taskTopic">Topic:</label>
+    <select id="taskTopic" name="topic">
+     
+    </select>
+
+    <label for="taskPriority">Priority:</label>
+    <select id="taskPriority" name="priority">
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="high">High</option>
+    </select>
+
+    <label for="taskDueDate">Due Date:</label>
+    <input type="date" id="taskDueDate" name="dueDate" />
+
+    <label style="display: flex; align-items: center; gap: 6px;">
+      <span>Completed</span>
+      <input type="checkbox" id="taskCompleted" name="completed" />
+    </label>
+
+    <button type="submit">Add Task</button>
+  </form>
+
+  <h3>All Tasks</h3>
+  <div id="tasksList"></div>
+</section>

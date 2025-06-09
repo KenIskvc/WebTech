@@ -1,24 +1,116 @@
+body {
+  background-color: var(--color-st-gray);
+  color: var(--color-st-antiwhite);
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  padding: 2rem;
+}
 
-.tasks-page {
-  padding: 20px;
+h2, h3 {
+  margin-bottom: 1rem;
+  color: var(--color-st-antiwhite);
+}
+
+form {
+  background-color: var(--color-st-lightgray);
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 600px;
+  margin-bottom: 2rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+form label {
+  display: block;
+  margin: 0.8rem 0 0.3rem;
+  font-weight: 600;
   color: var(--color-st-gray);
 }
 
-.tasks-page h2 {
-  margin-bottom: 16px;
-  color: var(--color-st-blue);
-  font-size: 24px;
+form input,
+form textarea,
+form select {
+  width: 100%;
+  padding: 0.6rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--color-st-lightgray);
+  background-color: var(--color-st-antiwhite);
+  font-size: 1rem;
+  color: var(--color-st-gray);
+}
+
+form input[type="checkbox"] {
+  width: auto;
+  margin-left: 0.5rem;
 }
 
 .task-item {
-  padding: 10px;
-  border: 1px solid var(--color-st-lightgray);
-  border-radius: 6px;
-  margin-bottom: 10px;
-  background-color: var(--color-st-antiwhite);
+  background-color: var(--color-st-lightgray);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  color: var(--color-st-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .task-item.completed {
+  opacity: 0.6;
   text-decoration: line-through;
-  background-color: var(--color-st-lightblue);
 }
+
+.task-item .material-icons {
+  color: var(--color-st-blue);
+  margin-right: 0.5rem;
+}
+
+.edit-task-btn,
+.delete-task-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.edit-task-btn .material-icons,
+.delete-task-btn .material-icons {
+  font-size: 20px;
+  color: var(--color-st-blue);
+}
+
+.edit-task-btn:hover .material-icons,
+.delete-task-btn:hover .material-icons {
+  color: var(--color-st-red);
+}
+
+button[type="submit"] {
+  margin-top: 0.5rem;
+}
+.voice-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+#micBtn {
+  background-color: var(--color-st-blue);
+  color: var(--color-st-antiwhite);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+
+#micBtn:hover {
+  background-color: var(--color-st-blue-mid);
+}
+

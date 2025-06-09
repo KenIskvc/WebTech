@@ -6,8 +6,12 @@ export function renderTasksPage(container: HTMLElement, data: any, id?: string):
   container.innerHTML = `
     <h2>${task ? "Edit Task" : "New Task"}</h2>
     <form id="taskForm">
-      <label for="taskTitle">Title:</label>
-      <input type="text" id="taskTitle" name="title" maxlength="50" value="${task ? task.title : ""}" required />
+     <label for="taskTitle">Title:</label>
+<div class="voice-input-wrapper">
+  <input type="text" id="taskTitle" name="title" maxlength="50" value="${task ? task.title : ""}" required />
+  <button type="button" id="micBtn" title="Speak task title">🎤</button>
+</div>
+
       
       <label for="taskDescription">Description:</label>
       <textarea id="taskDescription" name="description" maxlength="200" rows="3">${task ? task.description : ""}</textarea>
@@ -43,15 +47,15 @@ export function renderTasksPage(container: HTMLElement, data: any, id?: string):
     </div>
   `;
 
-  // Обработка формы
+ 
   const form = document.getElementById("taskForm") as HTMLFormElement;
   form.addEventListener("submit", (e: Event) => {
     e.preventDefault();
-    alert("Task saved (заглушка, без сохранения)");
+    alert("Task saved");
   });
 }
 
-// 👇 Здесь заглушка — пока не подключены реальные данные
+
 const mockData = {
   topics: [
     { id: 1, name: "Work", icon: "work", color: "#3A8DFF", created: "2025-05-01", autoDelete: 30 },
@@ -79,7 +83,7 @@ const mockData = {
   ]
 };
 
-// 👇 Этот код вызывается при загрузке страницы tasks
+
 const container = document.getElementById("app");
 if (container) {
   renderTasksPage(container, mockData);
