@@ -58,8 +58,21 @@ try {
   }
 }
 
+async function logoutAsync() : Promise<boolean> {
+try {
+    Alpine.store('auth').logout();
+
+    return true;
+  } catch (error) {
+    console.error("Logout error:", error);
+    return false;
+  }
+}
+
 const AuthService = {
   singupAsync,
-  loginAsync
+  loginAsync,
+  logoutAsync
 };
+
 export default AuthService;

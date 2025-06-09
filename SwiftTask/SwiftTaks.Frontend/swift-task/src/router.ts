@@ -77,7 +77,7 @@ export async function navigateTo(page: string, options?: { layout?: boolean }) {
     overlay.classList.remove("show");
 
     if (!layoutEventsBound) {
-      setUpLayout();
+      await setUpLayout();
       layoutEventsBound = true;
     }
 
