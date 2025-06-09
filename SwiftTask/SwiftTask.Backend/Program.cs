@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SwiftTask.Backend.Infrastructure;
 using SwiftTask.Backend.Models;
 
-var builder = WebApplication.CreateBuilder( args );
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
@@ -13,7 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<SwiftTaskDbContext>(
-    options => options.UseSqlServer( "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=SwiftTask;Integrated Security=True;Trust Server Certificate=True;" ) );
+    options => options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=SwiftTask;Integrated Security=True;Trust Server Certificate=True;"));
 
 builder.Services.AddAuthorization();
 
@@ -38,16 +38,18 @@ builder.Services.AddIdentityApiEndpoints<SwiftTaskUser>();
 /*builder.Services.AddIdentityApiEndpoints<SwiftTaskUser>()
     .AddEntityFrameworkStores<SwiftTaskDbContext>();*/
 
-builder.Services.AddCors( options =>
+builder.Services.AddCors(options =>
 {
-    options.AddPolicy( "AllowFrontend", builder =>
+    options.AddPolicy("AllowFrontend", builder =>
     {
-        builder.WithOrigins( "http://localhost:5173" )
+        builder.WithOrigins("http://localhost:5173")
             .AllowCredentials()
             .AllowAnyHeader()
             .AllowAnyMethod();
-    } );
-} );
+    });
+});
+
+builder.Services.AddHttpClient();
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -74,16 +76,12 @@ builder.Services.AddSwaggerGen(options =>
             },
             []
         }
-    });
-
-    // This part enables XML comments from /// to show in Swagger:
-    var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-});
+    } );
+} );
 
 var app = builder.Build();
 
-using( var scope = app.Services.CreateScope() )
+using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<SwiftTaskDbContext>();
@@ -94,7 +92,7 @@ using( var scope = app.Services.CreateScope() )
     context.Seed(userManager);
 }
 // Configure the HTTP request pipeline.
-if ( app.Environment.IsDevelopment() )
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -104,10 +102,10 @@ app.UseDefaultFiles();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseCors( "AllowFrontend" );
+app.UseCors("AllowFrontend");
 app.UseAuthorization();
 app.MapIdentityApi<SwiftTaskUser>();
 app.MapControllers();
 
-app.MapGet( "api/helloWorld", () => "Hello World!" );
+app.MapGet("api/helloWorld", () => "Hello World!");
 app.Run();

@@ -21,23 +21,21 @@ public class AuthController : ControllerBase {
     public async Task<ActionResult> GetUser() {
         if (User?.Identity?.IsAuthenticated != true)
             return Unauthorized();
-        try
-        {
+        try {
             var user = await _userManager.GetUserAsync(User);
             var anotherUser = await _userManager.FindByIdAsync(user.Id);
 
             return user == null
                 ? Unauthorized()
                 : Ok(new {
-                    user.Id,
-                    user.UserName,
-                    user.Email
+                    id = user.Id,
+                    userName = user.UserName,
+                    email = user.Email
                 });
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             await Console.Out.WriteLineAsync(ex.Message);
             return Unauthorized();
         }
-        
+
     }
 }
