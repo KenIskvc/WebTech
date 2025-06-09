@@ -86,6 +86,8 @@ async function loadPage(page: string, useLayout = false) {
   } catch (e) {
     console.error(`Failed to load page logic for ${page}:`, e);
   }
+
+  router.updatePageLinks();
 }
 
 function removePageAssets() {
