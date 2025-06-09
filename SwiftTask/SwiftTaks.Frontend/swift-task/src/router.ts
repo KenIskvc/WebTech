@@ -29,7 +29,12 @@ export function setupRoutes() {
     },
 
     home: () => authGuard(() => loadPage("home")),
-    profile: () => authGuard(() => loadPage("profile"))
+    profile: () => authGuard(() => loadPage("profile")),
+     about: () => authGuard(() => loadPage("about")),
+    dashboard: () => authGuard(() => loadPage("dashboard")),
+    settings: () => authGuard(() => loadPage("settings")),
+    tasks: () => authGuard(() => loadPage("tasks")),
+    topics: () => authGuard(() => loadPage("topics"))
   }).resolve();
 
   router.notFound(() => {
@@ -49,8 +54,8 @@ async function loadPage(page: string) {
   css.id = "page-style";
   document.head.appendChild(css);
 
-  const pageModules = import.meta.glob<{ default?: () => void }>('./pages/**/*.ts');
-  const path = `./pages/${page}/${page}.ts`;
+  const pageModules = import.meta.glob<{ default?: () => void }>('/src/pages/**/*.ts');
+  const path = `/src/pages/${page}/${page}.ts`;
 
   try {
     const moduleLoader = pageModules[path];
