@@ -1,38 +1,51 @@
-<div class="main">
+<header>
+    <div class="header-left">
+        <!-- Burger button for mobile -->
+        <button id="burgerBtn" class="burger-btn material-icons">menu</button>
+        <span class="logo1">SwiftTask</span>
+    </div>
+    <div class="header-right">
+        <!-- Dark mode toggle button -->
+        <button id="darkToggle" class="dark-toggle material-icons">dark_mode</button>
+    </div>
+</header>
+<div class="page-with-sidebar" style="display: flex;">
+    <!-- 1) Sidebar-Fragment -->
     <aside class="sidebar">
-        <h1>SwiftTask</h1>
-        <nav>
+        <nav class="nav">
             <ul>
-                <li>Home</li>
-                <li>Dashboard</li>
-                <li>Tasks</li>
-                <li>Topics</li>
-                <li>Announcements</li>
-                <li>Notifications</li>
+                <li><a href="/home"><span class="material-icons">home</span> Home</a></li>
+                <li><a href="/tasks"><span class="material-icons">checklist</span> Tasks</a></li>
+                <li><a href="/dashboard"><span class="material-icons">dashboard</span> Dashboard</a></li>
+                <li><a href="/about"><span class="material-icons">info</span> About</a></li>
+                <li class="sidebar-profile">
+                    <a href="/profile"><span class="material-icons">account_circle</span> Profile</a>
+                </li>
+                <li><a href="/settings"><span class="material-icons">settings</span> Settings</a></li>
             </ul>
         </nav>
+        <button class="logout-btn"><span class="material-icons">logout</span> Logout</button>
     </aside>
-
-    <main class="main-content">
-        <header class="topbar">
-            <h2>SwiftTask</h2>
-            <div class="top-controls">
-                <input type="text" placeholder="Search" />
-                <label class="switch">
-                    <input type="checkbox" id="darkModeToggle">
-                    <span class="slider"></span>
-                </label>
-                <span style="margin-left: 10px;">Dark Mode</span>
-
+    <div class="home-container">
+        <h2>Topics Overview</h2>
+        <div class="home-controls">
+            <input type="text" id="topicSearch" placeholder="Search Topics..." />
+            <select id="topicSort">
+      <option value="name">Name</option>
+      <option value="date">Date</option>
+    </select>
+            <div class="column-toggle">
+                <label for="columnSelect">Columns:</label>
+                <select id="columnSelect">
+        <option value="3">3</option>
+        <option value="2">2</option>
+        <option value="1">1</option>
+      </select>
             </div>
-        </header>
-
-        <!-- Hier werden die Topics dynamisch gerendert -->
-        <section class="task-lists" id="task-lists"></section>
-
-        <button class="btn bottom-btn">New Task</button>
-        <button class="btn bottom-btn">New Topic</button>
-
-
-    </main>
+            <button id="newTopicBtn" class="button">New Topic</button>
+            <button id="newTaskBtn" class="button">New Task</button>
+        </div>
+        <div id="topicCardsContainer" class="topic-list"></div>
+    </div>
 </div>
+<div id="overlay" class="overlay"></div>
