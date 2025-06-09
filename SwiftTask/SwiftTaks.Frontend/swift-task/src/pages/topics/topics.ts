@@ -1,5 +1,5 @@
 // src/pages/topics/topics.ts
-/*import Alpine from 'alpinejs';
+import Alpine from 'alpinejs';
 import type { TopicDto } from '../../types/dtos';
 import {
   fetchTopics,
@@ -121,7 +121,9 @@ export default async function setupTopics(): Promise<void> {
   // 8️⃣ Erstaufruf
   renderTopicList();
 }
-*/
+
+
+/*TEST*/
 export function renderTopicsPage(container: HTMLElement): void {
   const data = {
     topics: [
