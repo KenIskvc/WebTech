@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SwiftTask.Backend.Infrastructure;
-using Task = SwiftTask.Backend.Models.Task;
 using SwiftTask.Backend.DTOs;
+using SwiftTask.Backend.Infrastructure;
+using SwiftTask.Backend.Models;
+using Task = SwiftTask.Backend.Models.Task;
 
 
 namespace SwiftTask.Backend.Controllers;
@@ -14,11 +15,12 @@ public class TaskController : ControllerBase {
 
     public TaskController(SwiftTaskDbContext context) => _context = context;
 
-    public record UpdateTaskDto(string Description, bool IsDone, string TopicName);
-    public record CreateTaskDto(string Description, string TopicName);
+    public record UpdateTaskDto(string Title, string Description, bool IsDone, DateTime? DueDate, string TopicName);
+    public record CreateTaskDto(string Title, string? Description, DateTime? DueDate, string TopicName);
+
 
     // GET: api/Task
-    
+
     /// <summary>
     /// Retrieves a list of all tasks.
     /// </summary>
@@ -32,7 +34,9 @@ public class TaskController : ControllerBase {
             .Select(t => new TaskDto
             {
                 Id = t.Id,
+                Title = t.Title,
                 Description = t.Description,
+                DueDate = t.DueDate ?? DateTime.UtcNow,
                 IsDone = t.IsDone,
                 TopicName = t.Topic.Name
             })
@@ -57,7 +61,9 @@ public class TaskController : ControllerBase {
                 .Select(t => new TaskDto
                 {
                     Id = t.Id,
+                    Title = t.Title,
                     Description = t.Description,
+                    DueDate = t.DueDate ?? DateTime.UtcNow,
                     IsDone = t.IsDone,
                     TopicName = t.Topic.Name
                 })
@@ -85,7 +91,9 @@ public class TaskController : ControllerBase {
         var dto = new TaskDto
         {
             Id = t.Id,
+            Title = t.Title,
             Description = t.Description,
+            DueDate = t.DueDate ?? DateTime.UtcNow,
             IsDone = t.IsDone,
             TopicName = t.Topic.Name
         };
@@ -116,7 +124,9 @@ public class TaskController : ControllerBase {
         var topic = await _context.Topics.SingleOrDefaultAsync(t => t.Name == dto.TopicName);
         if (topic == null) return BadRequest($"Topic '{dto.TopicName}' not found");
 
+        task.Title = string.IsNullOrWhiteSpace(dto.Title) ? "New Task" : dto.Title;
         task.Description = dto.Description;
+        task.DueDate = dto.DueDate ?? DateTime.UtcNow.AddDays(7);
         task.IsDone = dto.IsDone;
         task.TopicId = topic.Id;
 
@@ -160,12 +170,19 @@ public class TaskController : ControllerBase {
 
     public async Task<ActionResult<TaskDto>> PostTask([FromBody] CreateTaskDto dto)
     {
+
+        if (string.IsNullOrWhiteSpace(dto.TopicName))
+            return BadRequest("Topic is required.");
+
         var topic = await _context.Topics.SingleOrDefaultAsync(t => t.Name == dto.TopicName);
-        if (topic == null) return BadRequest($"Topic '{dto.TopicName}' not found");
+        if (topic == null)
+            return BadRequest($"Topic '{dto.TopicName}' not found");
 
         var entity = new Task
         {
-            Description = dto.Description,
+            Title = string.IsNullOrWhiteSpace(dto.Title) ? "New Task" : dto.Title,
+            Description = dto.Description ?? "",
+            DueDate = dto.DueDate ?? DateTime.UtcNow.AddDays(7),
             TopicId = topic.Id,
             IsDone = false
         };
@@ -176,9 +193,11 @@ public class TaskController : ControllerBase {
         var result = new TaskDto
         {
             Id = entity.Id,
+            Title = entity.Title,
             Description = entity.Description,
+            DueDate = entity.DueDate ?? DateTime.UtcNow,
             IsDone = entity.IsDone,
-            TopicName = dto.TopicName
+            TopicName = topic.Name
         };
 
         return CreatedAtAction(nameof(GetTask), new { id = result.Id }, result);
