@@ -24,20 +24,6 @@ interface HomeData {
 export default async function setupHome(): Promise<void> {
   console.log('✅ Home page loaded');
 
-  // ─── 1️⃣ Burger-Menu (falls vorhanden) ──────────────────────────────
-  // const burgerBtn = document.getElementById('burgerBtn') as HTMLButtonElement | null;
-  // const sidebar   = document.querySelector('.sidebar')   as HTMLElement      | null;
-  // const overlay   = document.getElementById('overlay')   as HTMLElement      | null;
-  // if (burgerBtn && sidebar && overlay) {
-  //   burgerBtn.addEventListener('click', () => {
-  //     sidebar.classList.toggle('open');
-  //     overlay.classList.toggle('show');
-  //   });
-  //   overlay.addEventListener('click', () => {
-  //     sidebar.classList.remove('open');
-  //     overlay.classList.remove('show');
-  //   });
-  // }
 
   // ─── 2️⃣ Auth & User-ID holen ────────────────────────────────────────
   const auth = Alpine.store('auth');
