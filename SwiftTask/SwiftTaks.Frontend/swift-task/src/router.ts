@@ -1,52 +1,58 @@
 import Navigo from "navigo";
+import { mountLayout } from "./components/layout/layout";
+
 
 const router = new Navigo("/");
 
 async function authGuard(next: () => void) {
-  const auth = window.Alpine.store('auth');
+  const auth = window.Alpine.store("auth");
   if (!auth.isAuthenticated) {
     await auth.init();
   }
   if (auth.isAuthenticated) {
     next();
   } else {
-    router.navigate('/login');
+    router.navigate("/login");
   }
 }
 
 export function setupRoutes() {
-  router.on({
-    '/': () => router.navigate('/home'),
+  mountLayout();
 
-    login: async () => {
-      await loadPage("login");
-    },
-    signup: async () => {
-      await loadPage("signup");
-    },
-    sst: async() => {
-      await loadPage("sst")
-    },
+  router
+    .on({
+      "/": () => router.navigate("/home"),
 
-    home: () => authGuard(() => loadPage("home")),
-    profile: () => authGuard(() => loadPage("profile")),
-     about: () => authGuard(() => loadPage("about")),
-    dashboard: () => authGuard(() => loadPage("dashboard")),
-    settings: () => authGuard(() => loadPage("settings")),
-    tasks: () => authGuard(() => loadPage("tasks")),
-    topics: () => authGuard(() => loadPage("topics"))
-  }).resolve();
+      login: async () => {
+        removeLayout();
+        await loadPage("login", false);
+      },
+      signup: async () => {
+        removeLayout();
+        await loadPage("signup", false);
+      },
+      sst: async () => {
+        removeLayout();
+        await loadPage("sst", false);
+      },
+
+      home: () => authGuard(() => loadPage("home", true)),
+      profile: () => authGuard(() => loadPage("profile", true)),
+      about: () => authGuard(() => loadPage("about", true)),
+      dashboard: () => authGuard(() => loadPage("dashboard", true)),
+      settings: () => authGuard(() => loadPage("settings", true)),
+      tasks: () => authGuard(() => loadPage("tasks", true)),
+      topics: () => authGuard(() => loadPage("topics", true)),
+    })
+    .resolve();
 
   router.notFound(() => {
     document.getElementById("app")!.innerHTML = "<h1>404 - Page Not Found</h1>";
   });
 }
 
-async function loadPage(page: string) {
+async function loadPage(page: string, useLayout = false) {
   removePageAssets();
-
-  const html = await fetch(`/src/pages/${page}/${page}.html`).then(res => res.text());
-  document.getElementById("app")!.innerHTML = html;
 
   const css = document.createElement("link");
   css.rel = "stylesheet";
@@ -54,8 +60,20 @@ async function loadPage(page: string) {
   css.id = "page-style";
   document.head.appendChild(css);
 
-  const pageModules = import.meta.glob<{ default?: () => void }>('/src/pages/**/*.ts');
-  const path = `/src/pages/${page}/${page}.ts`;
+  const html = await fetch(`/src/pages/${page}/${page}.html`).then((res) =>
+    res.text()
+  );
+
+  const target = useLayout
+    ? document.getElementById("app-content")
+    : document.getElementById("app");
+    
+  if (!target) return console.error("Target container not found");
+
+  target.innerHTML = html;
+
+  const pageModules = import.meta.glob<{ default?: () => void }>('./pages/**/*.ts');
+  const path = `./pages/${page}/${page}.ts`;
 
   try {
     const moduleLoader = pageModules[path];
@@ -75,5 +93,8 @@ function removePageAssets() {
   document.getElementById("page-script")?.remove();
 }
 
+function removeLayout() {
+  document.getElementById("app")!.innerHTML = "";
+}
 
 export { router };

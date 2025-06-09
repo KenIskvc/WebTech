@@ -5,6 +5,7 @@ import Alpine from 'alpinejs';
 import { authStore } from "./stores/auth-store";
 import { weatherStore } from "./stores/weather-store";
 
+
 declare global {
   interface Window {
     Alpine: typeof Alpine;

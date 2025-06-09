@@ -1,0 +1,8 @@
+.layout {
+    display: flex;
+    height: 100%;
+}
+
+#app-content {
+    flex-grow: 1;
+}

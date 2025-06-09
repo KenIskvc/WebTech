@@ -6,7 +6,6 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  /* background-color: #242424; */
   background-color:  #4a5568;
 
   font-synthesis: none;
@@ -46,7 +45,6 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  /* place-items: center; */
   min-width: 320px;
   min-height: 100vh;
 }
@@ -100,11 +98,9 @@ button {
   transition: background-color 0.3s;
 }
 button:hover {
-  /* border-color: #646cff; */
   background-color: var(--color-st-blue-mid);
-  /* background-color: var(--color-st-blue); */
-  /* border-color: var(--color-st-blue-mid-st-blue); */
 }
+
 button:focus {
   outline: 2px solid var(--color-st-blue);
 }
