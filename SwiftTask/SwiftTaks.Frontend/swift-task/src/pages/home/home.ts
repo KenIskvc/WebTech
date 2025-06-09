@@ -160,8 +160,8 @@ export default async function setupHome(): Promise<void> {
   sortSelect.addEventListener('change',  () => { sortKey   = sortSelect.value as 'name'|'date'; renderTopicCards(); });
   columnSelect.addEventListener('change',() => { topicColumns = parseInt(columnSelect.value,10); renderTopicCards(); });
 
-  newTopicBtn.addEventListener('click',() => { window.location.hash = '#topics'; });
-  newTaskBtn.addEventListener('click', () => { window.location.hash = '#tasks'; });
+  newTopicBtn.addEventListener('click', () => { window.location.hash = '/topics'; });
+  newTaskBtn.addEventListener('click', () => { window.location.hash = '/tasks'; });
 
   // ─── 8️⃣ Erstaufruf ────────────────────────────────────────────────
   renderTopicCards();

@@ -1,5 +1,5 @@
 // src/services/task-service.ts
-/*import type { TaskDto } from '../types/dtos';  
+import type { TaskDto } from '../types/dtos';  
 
 
 const API_BASE = "https://localhost:7050/api";
@@ -14,7 +14,7 @@ function getAuthHeaders(): HeadersInit {
 /**
  * Lädt alle Tasks vom Backend.
  */
-/*export async function fetchTasks(): Promise<TaskDto[]> {
+export async function fetchTasks(): Promise<TaskDto[]> {
   const res = await fetch(`${API_BASE}/Task`, {
     headers: getAuthHeaders(),
   });
@@ -26,7 +26,7 @@ function getAuthHeaders(): HeadersInit {
  * Erstellt eine neue Task.
  * Erwartet genau das DTO ohne id.
  */
-/*export async function createTask(
+export async function createTask(
   payload: Omit<TaskDto, 'id'>
 ): Promise<TaskDto> {
   const res = await fetch(`${API_BASE}/Task`, {
@@ -45,7 +45,7 @@ function getAuthHeaders(): HeadersInit {
  * Aktualisiert eine bestehende Task.
  * Die API erwartet das vollständige DTO inklusive id.
  */
-/*export async function updateTask(
+export async function updateTask(
   id: number,
   payload: TaskDto
 ): Promise<void> {
@@ -63,10 +63,10 @@ function getAuthHeaders(): HeadersInit {
 /**
  * Löscht eine Task anhand der ID.
  */
-/*export async function deleteTask(id: number): Promise<void> {
+export async function deleteTask(id: number): Promise<void> {
   const res = await fetch(`${API_BASE}/Task/${id}`, {
     method: 'DELETE',
     headers: getAuthHeaders(),
   });
   if (!res.ok) throw new Error("Failed to delete task");
-}*/
+}
