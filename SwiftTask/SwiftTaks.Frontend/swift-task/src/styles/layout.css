@@ -1,0 +1,114 @@
+/* Base layout and structural styles */
+
+html {
+    font-size: 16px;
+    font-family: var(--font-family);
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    line-height: 1.5;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#app-content {
+    /* Ensure main content can scroll if needed */
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+
+/* Container grid for desktop (set in responsive.css for larger screens) */
+
+.container {
+    width: 100%;
+    max-width: 100vw;
+    margin: 0 auto;
+    padding-left: var(--base-spacing);
+    padding-right: var(--base-spacing);
+    box-sizing: border-box;
+}
+
+
+/* Header layout */
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--secondary-color);
+    background: var(--bg-color);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-left: 8px;
+}
+
+
+/* Sidebar (drawer) base styles */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    background: var(--bg-color);
+    border-right: 1px solid var(--secondary-color);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 200;
+}
+
+.sidebar.open {
+    transform: translateX(0);
+}
+
+
+/* Overlay for mobile menu (covers content when menu open) */
+
+.overlay {
+    display: none;
+}
+
+.overlay.show {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+}
+
+
+/* Main content area styling */
+
+main {
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+
+/* Buttons in header (burger and dark mode) */
+
+.burger-btn,
+.dark-toggle {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 24px;
+    cursor: pointer;
+    margin-right: 30px;
+}

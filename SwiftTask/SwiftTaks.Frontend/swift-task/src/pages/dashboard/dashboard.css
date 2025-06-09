@@ -1,0 +1,58 @@
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.stat-card {
+  background-color: var(--color-st-antiwhite);
+  color: var(--color-st-gray);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--color-st-lightgray);
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: transform 0.2s;
+}
+
+.stat-card:hover {
+  transform: scale(1.02);
+}
+
+.stat-icon {
+  font-size: 36px;
+  color: var(--color-st-blue);
+}
+
+.stat-info {
+  flex-grow: 1;
+}
+
+.stat-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-st-gray);
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--color-st-blue);
+}
+
+.progress-bar {
+  background-color: var(--color-st-lightblue);
+  height: 8px;
+  border-radius: 4px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.progress {
+  background-color: var(--color-st-blue);
+  height: 100%;
+  transition: width 0.3s ease-in-out;
+}
