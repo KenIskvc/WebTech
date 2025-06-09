@@ -26,13 +26,17 @@
     padding: 5px;
 }
 
-.home-controls button {
+.home-controls button,
+.home-controls a.button {
     padding: 8px 12px;
+    margin-top: 0;
+    /* Override the default margin */
 }
 
 .home-controls input[type="text"],
 .home-controls select,
-.home-controls button {
+.home-controls button,
+.home-controls a.button {
     height: 42px;
     padding: 0 16px;
     font-size: 1rem;
@@ -225,19 +229,22 @@ select:focus {
     box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.15);
 }
 
-button.btn {
+button.btn,
+a.btn {
     background: linear-gradient(135deg, var(--color-st-blue), #5fa3ff);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 6px;
     transition: all 0.2s ease;
 }
 
-button.btn:hover {
+button.btn:hover,
+a.btn:hover {
     transform: translateY(-1px);
     opacity: 0.95;
 }
 
-button {
+button,
+a.button {
     background: var(--color-st-blue);
     color: #fff;
     border: none;
@@ -246,4 +253,8 @@ button {
     font: inherit;
     cursor: pointer;
     margin-top: 10px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }

@@ -1,5 +1,6 @@
 // src/pages/home/home.ts
 import Alpine from 'alpinejs';
+import { router } from '../../router';
 
 export interface Topic {
   id: number;
@@ -65,11 +66,11 @@ export default async function setupHome(): Promise<void> {
   };
 
   // ─── 4️⃣ UI-Elemente & State ───────────────────────────────────────
-  const searchInput    = document.getElementById('topicSearch')        as HTMLInputElement;
+  //const searchInput    = document.getElementById('topicSearch')        as HTMLInputElement;
   const sortSelect     = document.getElementById('topicSort')          as HTMLSelectElement;
   const columnSelect   = document.getElementById('columnSelect')       as HTMLSelectElement;
-  const newTopicBtn    = document.getElementById('newTopicBtn')        as HTMLButtonElement;
-  const newTaskBtn     = document.getElementById('newTaskBtn')         as HTMLButtonElement;
+  //const newTopicBtn    = document.getElementById('newTopicBtn')        as HTMLButtonElement;
+  //const newTaskBtn     = document.getElementById('newTaskBtn')         as HTMLButtonElement;
   const cardsContainer = document.getElementById('topicCardsContainer') as HTMLElement;
 
   let searchTerm   = '';
@@ -155,13 +156,14 @@ export default async function setupHome(): Promise<void> {
     }
   });
 
-  // ─── 7️⃣ Controls für Suche, Sort & Spalten ────────────────────────
-  searchInput.addEventListener('input',  () => { searchTerm = searchInput.value.toLowerCase(); renderTopicCards(); });
+  // ─── 7️⃣ Controls für Suche, Sort & Spalten ────────────────────────  searchInput.addEventListener('input',  () => { searchTerm = searchInput.value.toLowerCase(); renderTopicCards(); });
   sortSelect.addEventListener('change',  () => { sortKey   = sortSelect.value as 'name'|'date'; renderTopicCards(); });
   columnSelect.addEventListener('change',() => { topicColumns = parseInt(columnSelect.value,10); renderTopicCards(); });
+  
+  // Update links with Navigo
+  router.updatePageLinks();
 
-  newTopicBtn.addEventListener('click', () => { window.location.hash = '/topics'; });
-  newTaskBtn.addEventListener('click', () => { window.location.hash = '/tasks'; });
+
 
   // ─── 8️⃣ Erstaufruf ────────────────────────────────────────────────
   renderTopicCards();

@@ -19,11 +19,26 @@ export default async function setupTopics(): Promise<void> {
   const userId = auth.user?.Id;
   if (!userId) {
     console.error('🚨 Kein eingeloggter User – bitte einloggen!');
+    // For testing, use dummy data instead of returning
+    useDummyData();
     return;
   }
 
-  // 2️⃣ Topics vom Backend laden
-  let topics: TopicDto[] = await fetchTopics(userId);
+  // Try to load from backend, fall back to dummy data if it fails
+  let topics: TopicDto[] = [];
+  try {
+    topics = await fetchTopics(userId);
+    if (topics.length === 0) {
+      // No topics from backend, use dummy data
+      console.log('No topics found, using dummy data');
+      useDummyData();
+      return;
+    }
+  } catch (error) {
+    console.error('Error loading topics, using dummy data', error);
+    useDummyData();
+    return;
+  }
 
   // 3️⃣ DOM-Elemente referenzieren
   const titleEl         = document.getElementById('topics-title')      as HTMLElement;
@@ -122,13 +137,19 @@ export default async function setupTopics(): Promise<void> {
   renderTopicList();
 }
 
-
-/*TEST*/
-export function renderTopicsPage(container: HTMLElement): void {
+// Function to use dummy data when backend data is not available
+function useDummyData(): void {
+  console.log('Using dummy data for topics');
+  const container = document.querySelector('.topics-container') as HTMLElement;
+  if (!container) {
+    console.error('Could not find topics-container element');
+    return;
+  }
+  
   const data = {
     topics: [
-      { id: 1, name: "Work", color: "#3A8DFF", icon: "work", autoDelete: 7, created: "2025-06-01" },
-      { id: 2, name: "Personal", color: "#FF6B6B", icon: "person", autoDelete: 0, created: "2025-06-01" }
+      { Id: 1, Name: "Work", color: "#3A8DFF", icon: "work", autoDelete: 7, created: "2025-06-01", Tasks: [] },
+      { Id: 2, Name: "Personal", color: "#FF6B6B", icon: "person", autoDelete: 0, created: "2025-06-01", Tasks: [] }
     ],
     tasks: [
       { id: 1, topicId: 1 },
@@ -137,25 +158,43 @@ export function renderTopicsPage(container: HTMLElement): void {
     ]
   };
 
+  // Assign tasks to topics for counting
+  data.topics.forEach(topic => {
+    topic.Tasks = data.tasks.filter(task => task.topicId === topic.Id);
+  });
+
   container.innerHTML = `
-    <h2>Topics</h2>
+    <h2 id="topics-title">Topics (Test Data)</h2>
     <form id="topicForm">
-      <input type="text" id="topicName" placeholder="Name" required />
-      <input type="color" id="topicColor" value="#3A8DFF" />
-      <input type="text" id="topicIcon" placeholder="Icon (e.g. work)" />
-      <input type="number" id="topicAutoDelete" placeholder="Auto delete (days)" min="0" />
-      <button type="submit">Add Topic</button>
+      <label for="topicName">Name:</label>
+      <input type="text" id="topicName" name="name" maxlength="50" required />
+
+      <label for="topicColor">Color:</label>
+      <input type="color" id="topicColor" name="color" value="#3A8DFF" />
+
+      <label for="topicIcon">Icon (Material Icon name or emoji):</label>
+      <input type="text" id="topicIcon" name="icon" placeholder="e.g. work or school" />
+
+      <label for="topicAutoDelete">Auto-delete after (days):</label>
+      <input type="number" id="topicAutoDelete" name="autoDelete" value="0" min="0" />
+
+      <button type="submit" class="button" id="topic-submit-btn">Add Topic</button>
     </form>
 
+    <h3>Existing Topics</h3>
     <div id="topicsList">
       ${data.topics.map(t => {
-        const taskCount = data.tasks.filter(task => task.topicId === t.id).length;
+        const taskCount = t.Tasks?.length ?? 0;
         return `
-          <div class="topic-card" style="border-left: 6px solid ${t.color};">
-            <span class="material-icons">${t.icon}</span>
-            <div>
-              <strong>${t.name}</strong><br />
-              <small>${taskCount} task(s)</small>
+          <div class="topic-item" data-id="${t.Id}">
+            <div class="topic-icon">
+              <span class="material-icons">${t.icon || 'category'}</span>
+            </div>
+            <div class="topic-name">${t.Name}</div>
+            <div class="topic-stats">${taskCount} task(s)</div>
+            <div class="topic-actions">
+              <button class="edit-topic-btn" title="Edit"><span class="material-icons">edit</span></button>
+              <button class="delete-topic-btn" title="Delete"><span class="material-icons">delete</span></button>
             </div>
           </div>
         `;
@@ -163,8 +202,48 @@ export function renderTopicsPage(container: HTMLElement): void {
     </div>
   `;
 
+  // Add event listeners
   document.getElementById("topicForm")?.addEventListener("submit", (e) => {
     e.preventDefault();
-    alert("Topic creation not implemented (mock only)");
+    alert("Topic creation not implemented (test data only)");
   });
+
+  // Attach listeners for edit/delete buttons
+  const listContainer = document.getElementById('topicsList');
+  if (listContainer) {
+    // Edit buttons
+    listContainer.querySelectorAll('.edit-topic-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = (btn as HTMLElement).closest('.topic-item')!;
+        const id = +item.dataset.id!;
+        const topic = data.topics.find(t => t.Id === id)!;
+
+        // Form befüllen
+        const nameInput = document.getElementById('topicName') as HTMLInputElement;
+        const colorInput = document.getElementById('topicColor') as HTMLInputElement;
+        const iconInput = document.getElementById('topicIcon') as HTMLInputElement;
+        const autoDeleteInput = document.getElementById('topicAutoDelete') as HTMLInputElement;
+
+        if (nameInput && colorInput && iconInput && autoDeleteInput) {
+          nameInput.value = topic.Name;
+          colorInput.value = topic.color || '#3A8DFF';
+          iconInput.value = topic.icon || '';
+          autoDeleteInput.value = String(topic.autoDelete ?? 0);
+        }
+        
+        const submitBtn = document.getElementById('topic-submit-btn');
+        const titleEl = document.getElementById('topics-title');
+        
+        if (submitBtn) submitBtn.textContent = 'Save Changes';
+        if (titleEl) titleEl.textContent = 'Edit Topic';
+      });
+    });
+
+    // Delete buttons
+    listContainer.querySelectorAll('.delete-topic-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        alert("Delete functionality not implemented (test data only)");
+      });
+    });
+  }
 }
