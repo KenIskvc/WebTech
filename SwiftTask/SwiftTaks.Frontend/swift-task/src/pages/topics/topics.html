@@ -1,18 +1,8 @@
 <div class="topics-container">
     <h2 id="topics-title">Topics</h2>
-    <form id="topicForm">
+    <form id="topicForm" name="topicForm" autocomplete="topicForm">
         <label for="topicName">Name:</label>
         <input type="text" id="topicName" name="name" maxlength="50" required />
-
-        <label for="topicColor">Color:</label>
-        <input type="color" id="topicColor" name="color" value="#3A8DFF" />
-
-        <label for="topicIcon">Icon (Material Icon name or emoji):</label>
-        <input type="text" id="topicIcon" name="icon" placeholder="e.g. work or school" />
-
-        <label for="topicAutoDelete">Auto-delete after (days):</label>
-        <input type="number" id="topicAutoDelete" name="autoDelete" value="0" min="0" />
-
         <button type="submit" class="button" id="topic-submit-btn">Add Topic</button>
     </form>
 

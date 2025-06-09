@@ -31,14 +31,9 @@ form {
     padding: 0.75rem;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
-    background-color: var(--color-st-antiwhite);
+    background-color: white;
     color: var(--color-st-gray);
     margin-bottom: 0.5rem;
-}
-
-#topicForm input[type="color"] {
-    height: 42px;
-    padding: 0.25rem;
 }
 
 #topicForm input:focus {
@@ -86,6 +81,7 @@ form {
 .topic-item .topic-name {
     flex: 1;
     font-weight: 500;
+    color: black;
 }
 
 .topic-item .topic-stats {
