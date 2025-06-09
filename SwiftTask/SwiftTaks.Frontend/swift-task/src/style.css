@@ -135,17 +135,6 @@ button:focus {
     }
 }
 
-
-/*extra styles and global layout*/
-
-
-/* ================================
-   BASE LAYOUT
-   ================================ */
-
-
-/* Base layout and structural styles */
-
 html {
     font-size: 16px;
     font-family: var(--font-family);
@@ -157,10 +146,6 @@ html {
 body {
     margin: 0;
     padding: 0;
-}
-
-header {
-    height: 65px;
 }
 
 
@@ -182,6 +167,7 @@ header {
     justify-content: space-between;
     position: sticky;
     top: 0;
+    height: 65px;
     align-items: center;
     z-index: 100;
     padding: 1rem;
@@ -201,116 +187,7 @@ header {
 }
 
 
-/* Buttons in header (burger and dark mode) */
-
-.burger-btn,
-.dark-toggle {
-    background: none;
-    border: none;
-    color: var(--color-st-lightgray);
-    font-size: 24px;
-    cursor: pointer;
-    padding: 4px;
-    border-radius: 4px;
-    transition: background-color 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 40px;
-    min-height: 40px;
-}
-
-.burger-btn:hover,
-.dark-toggle:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-}
-
-.burger-btn:focus,
-.dark-toggle:focus {
-    outline: none;
-    background-color: rgba(0, 0, 0, 0.1);
-}
-
-
-/* Sidebar (drawer) base styles */
-
-.sidebar {
-    top: 0;
-    left: 0;
-    width: 250px;
-    height: 100%;
-    background: var(--color-st-lightgray);
-    border-right: 1px solid var(--color-st-gray);
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-    z-index: 200;
-}
-
-.sidebar.open {
-    transform: translateX(0);
-}
-
-
-/* Overlay for mobile menu (covers content when menu open) */
-
-.overlay {
-    display: none;
-}
-
-.overlay.show {
-    display: block;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 100;
-}
-
-
-/* ================================
-   COMPONENTS
-   ================================ */
-
-
-/* Navigation menu styles */
-
-.nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.nav li {
-    margin: 5px 0;
-}
-
-.nav a {
-    display: flex;
-    align-items: center;
-    padding: 10px 15px;
-    color: var(--color-st-lightgray);
-    text-decoration: none;
-    border-radius: 4px;
-}
-
-.nav a .material-icons {
-    margin-right: 8px;
-    font-size: 20px;
-}
-
-.nav a:hover {
-    background: var(--color-st-blue-mid);
-}
-
-.nav a.active {
-    background: var(--color-st-blue-mid);
-    font-weight: bold;
-}
-
-
-/* Forms (Topics and Tasks) */
+/*TOPIC AND TASK FORM*/
 
 form input,
 form select,
@@ -339,7 +216,7 @@ form textarea:focus {
 }
 
 
-/* Modern Checkbox Styling for task list */
+/* SVETLANA's PART*/
 
 .task-item input[type="checkbox"] {
     appearance: none;
@@ -375,57 +252,6 @@ form textarea:focus {
 
 .task-item .task-title {
     margin-left: 2px;
-}
-
-
-/* Sidebar styles */
-
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 250px;
-    height: 100%;
-    background: var(--color-st-antiwhite);
-    border-right: 1px solid var(--color-st-gray);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    z-index: 200;
-}
-
-.sidebar-profile {
-    margin: 18px 0 0 0;
-    padding: 0 0 0 0;
-}
-
-.sidebar .material-icons {
-    vertical-align: middle;
-}
-
-
-/* Logout button styles */
-
-.logout-btn {
-    width: 100%;
-    background: var(--color-st-red);
-    color: #fff;
-    border: none;
-    border-radius: 0 0 8px 8px;
-    padding: 14px 0;
-    font-size: 1.1em;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: pointer;
-    margin-top: auto;
-    transition: background 0.2s;
-}
-
-.logout-btn:hover {
-    background: #d32f2f;
 }
 
 
