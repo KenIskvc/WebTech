@@ -1,0 +1,51 @@
+<div class="tasks-container">
+    <h2 id="tasks-title">Tasks</h2>
+
+    <div class="tasks-controls">
+        <div class="filters">
+            <input type="text" id="taskSearch" placeholder="Search tasks..." />
+            <select id="topicFilter">
+        <option value="all">All Topics</option>
+        <!-- Topics will be added dynamically -->
+      </select>
+            <select id="statusFilter">
+        <option value="all">All Status</option>
+        <option value="active">Active</option>
+        <option value="completed">Completed</option>
+      </select>
+        </div>
+    </div>
+
+    <div id="taskFormContainer" class="task-form-container hidden">
+        <form id="taskForm">
+            <h3 id="form-title">Add New Task</h3>
+
+            <label for="taskTitle">Title:</label>
+            <input type="text" id="taskTitle" required placeholder="What needs to be done?" />
+
+            <label for="taskTopic">Topic:</label>
+            <select id="taskTopic" required>
+        <!-- Topics will be added dynamically -->
+      </select>
+
+            <label for="taskDueDate">Due Date:</label>
+            <input type="date" id="taskDueDate" />
+
+            <label for="taskPriority">Priority:</label>
+            <select id="taskPriority">
+        <option value="low">Low</option>
+        <option value="medium" selected>Medium</option>
+        <option value="high">High</option>
+      </select>
+
+            <div class="form-buttons">
+                <button type="submit" class="btn">Save Task</button>
+                <button type="button" id="cancelTaskBtn" class="btn btn-secondary">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="taskListContainer" class="task-list-container">
+        <!-- Tasks will be rendered here -->
+    </div>
+</div>
