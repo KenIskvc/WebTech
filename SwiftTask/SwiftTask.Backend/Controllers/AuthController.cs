@@ -23,7 +23,6 @@ public class AuthController : ControllerBase {
             return Unauthorized();
         try {
             var user = await _userManager.GetUserAsync(User);
-            var anotherUser = await _userManager.FindByIdAsync(user.Id);
 
             return user == null
                 ? Unauthorized()

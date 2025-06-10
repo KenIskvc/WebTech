@@ -1,9 +1,7 @@
-import AuthService from "../../services/auth-service";
 import { weatherStore } from "../../stores/weather-store";
 import WeatherService from "../../services/weather-service";
 import Alpine from 'alpinejs';
 import { User } from "../../models/User";
-import { router } from "../../router";
 
 
 export function mountLayout(): void {
@@ -11,7 +9,7 @@ export function mountLayout(): void {
   app.innerHTML = `
     <header>
       <div class="header-left">
-        <button id="burgerBtn" class="burger-btn material-icons">menu</button>
+        <button type="button" id="burgerBtn" class="burger-btn material-icons">menu</button>
         <span class="logo1">SwiftTask</span>
       </div>
       <div id="userInfo">
