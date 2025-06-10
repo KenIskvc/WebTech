@@ -1,6 +1,8 @@
 .sidebar-layout {
     display: flex;
-    height: 100%;
+    flex-grow: 1;
+    overflow: hidden;
+    position: relative;
 }
 
 .content-wrapper {
@@ -51,6 +53,7 @@ header {
 #app-content {
     height: 100%;
     padding: 2rem;
+    overflow: auto;
 }
 
 .logo1 {
@@ -89,9 +92,10 @@ header {
 }
 
 .sidebar {
-    position: fixed;
-    top: 55px;
-    left: 0;
+    position: absolute;
+    inset: 0;
+    /* top: 55px;
+    left: 0; */
     width: 150px;
     height: 100%;
     background: var(--color-st-lightgray);
