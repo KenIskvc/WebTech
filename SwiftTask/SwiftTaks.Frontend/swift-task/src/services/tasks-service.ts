@@ -2,7 +2,7 @@
 import Alpine from 'alpinejs';
 
 
-interface TaskDto {
+export interface TaskDto {
   id: number;
   title: string;
   description?: string;

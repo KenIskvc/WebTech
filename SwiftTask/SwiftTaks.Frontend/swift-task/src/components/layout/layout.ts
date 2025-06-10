@@ -1,8 +1,7 @@
 import { weatherStore } from "../../stores/weather-store";
 import WeatherService from "../../services/weather-service";
-import Alpine from 'alpinejs';
+import Alpine from "alpinejs";
 import { User } from "../../models/User";
-
 
 export function mountLayout(): void {
   const app = document.getElementById("app")!;
@@ -31,9 +30,6 @@ export function mountLayout(): void {
             <li><a href="/tasks" data-navigo><span class="material-icons">checklist</span> Tasks</a></li>
             <li><a href="/dashboard" data-navigo><span class="material-icons">dashboard</span> Dashboard</a></li>
             <li><a href="/about" data-navigo><span class="material-icons">info</span> About</a></li>
-            <li class="sidebar-profile">
-              <a href="/profile" data-navigo><span class="material-icons">account_circle</span> Profile</a>
-            </li>
           </ul>
         </nav>
       </aside>
@@ -46,6 +42,11 @@ export function mountLayout(): void {
   `;
 }
 
+// <li class="sidebar-profile">
+//   <a href="/profile" data-navigo>
+//     <span class="material-icons">account_circle</span> Profile
+//   </a>
+// </li>;
 // <button id="darkToggle" class="dark-toggle material-icons">dark_mode</button>
 
 export async function setUpLayout(): Promise<void> {
@@ -74,19 +75,21 @@ export async function setUpLayout(): Promise<void> {
     overlay.classList.remove("show");
   });
 
-  document.getElementById("logoutButton")?.addEventListener('click', async () => {
-    await await Alpine.store("auth").logout();
-  })
+  document
+    .getElementById("logoutButton")
+    ?.addEventListener("click", async () => {
+      await await Alpine.store("auth").logout();
+    });
   await Alpine.store("weather").init();
   await renderUserInfo();
   renderWeather();
 }
 
-async function renderUserInfo () {
+async function renderUserInfo() {
   const container = document.getElementById("userInfo");
   if (!container) return;
 
-  const user : User = await Alpine.store("auth").user as User;
+  const user: User = (await Alpine.store("auth").user) as User;
   if (user && user.userName) {
     container.textContent = `Hello, ${user.userName} 👋`;
   } else {
@@ -117,4 +120,3 @@ function renderWeather() {
     <span>${Math.round(data.temperature)}°C in ${city}</span>
   `;
 }
-

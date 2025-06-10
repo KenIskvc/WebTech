@@ -1,5 +1,5 @@
-
 import TasksService from "../../services/tasks-service";
+import SstService from "../../services/stt-service";
 
 console.log("✅ tasks.ts module loaded");
 
@@ -13,23 +13,35 @@ export default async function () {
   const dueDateInput = app.querySelector("#task-due") as HTMLInputElement;
   const topicInput = app.querySelector("#task-topic") as HTMLSelectElement;
   const isDoneCheckbox = app.querySelector("#task-done") as HTMLInputElement;
-
+  const recordBtn = document.getElementById("micButton");
   const taskListContainer = app.querySelector("#task-list") as HTMLDivElement;
 
+  if (recordBtn) {
+    console.log(recordBtn);
+    recordBtn.addEventListener("click", () => {
+      if (descInput.value.trim() !== "") return;
 
+      SstService.startRecognition((text: string) => {
+        console.log("Recognized:", text);
+        descInput.value = text;
+        descInput.focus();
+      });
+    });
+  }
   async function populateTopicDropdown(tasks: any[]) {
     const select = document.getElementById("task-topic") as HTMLSelectElement;
     const topicSet = new Set<string>();
 
-    tasks.forEach(task => {
+    tasks.forEach((task) => {
       if (task.topicName) {
         topicSet.add(task.topicName);
       }
-       });
+    });
 
-       select.innerHTML = '<option value="" disabled selected>Select Topic</option>';
+    select.innerHTML =
+      '<option value="" disabled selected>Select Topic</option>';
 
-        topicSet.forEach(topic => {
+    topicSet.forEach((topic) => {
       const opt = document.createElement("option");
       opt.value = topic;
       opt.textContent = topic;
@@ -37,14 +49,12 @@ export default async function () {
     });
   }
 
-
   // Load all tasks from backend and show them
   async function loadTasks() {
     const tasks = await TasksService.fetchTasks();
     taskListContainer.innerHTML = ""; // Clear before adding
 
     await populateTopicDropdown(tasks);
-    
 
     tasks.forEach((task) => {
       const taskDiv = document.createElement("div");
@@ -52,7 +62,9 @@ export default async function () {
       taskDiv.innerHTML = `
   <div class="task-topic">${task.topicName}</div>
   <div class="task-desc">${task.description || ""}</div>
-  <div class="task-due"><strong>Due Date:</strong> ${new Date(task.dueDate).toLocaleDateString()}</div>
+  <div class="task-due"><strong>Due Date:</strong> ${new Date(
+    task.dueDate
+  ).toLocaleDateString()}</div>
   <div class="checkbox-wrapper">
     <input type="checkbox" disabled ${task.isDone ? "checked" : ""} />
     <label>Is Done</label>
@@ -78,6 +90,5 @@ export default async function () {
     await TasksService.createTask(newTask); // Save task
     await loadTasks(); // Refresh list
     form.reset(); // Clear form
-
   });
 }
