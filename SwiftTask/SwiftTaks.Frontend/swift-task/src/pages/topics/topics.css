@@ -9,13 +9,47 @@ form {
     margin-bottom: 20px;
 }
 
-#topicForm {
-    background-color: var(--color-st-antiwhite);
-    border-radius: var(--radius-md);
-    padding: 1.5rem;
+
+/* --- Topic Form Header (matches task-header) --- */
+
+.topic-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 1.5rem;
-    box-shadow: var(--shadow-md);
-    max-width: 600px;
+}
+
+.topic-header img,
+#topicForm>img.logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 80px;
+    height: auto;
+    margin-bottom: 0.5rem;
+}
+
+.topic-header h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--color-st-antiwhite);
+    margin: 0;
+}
+
+
+/* --- Topic Form (matches task-form) --- */
+
+#topicForm {
+    background-color: var(--color-st-gray-darker);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--box-shadow);
+    max-width: 520px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #topicForm label {
@@ -23,41 +57,70 @@ form {
     margin-top: 1rem;
     margin-bottom: 0.5rem;
     font-weight: 500;
-    color: var(--color-st-gray);
+    color: var(--color-st-lightgray);
 }
 
-#topicForm input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    background-color: white;
+#topicForm input[type="text"] {
+    font-size: 1rem;
+    padding: 10px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-st-lightgray2);
+    background-color: var(--color-st-antiwhite);
     color: var(--color-st-gray);
+    width: 100%;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    font-family: inherit;
     margin-bottom: 0.5rem;
 }
 
 #topicForm input:focus {
-    border-color: var(--color-st-blue-mid);
-    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
     outline: none;
+    border-color: var(--color-st-blue);
+    box-shadow: 0 0 0 2px var(--color-st-blue-mid);
 }
 
 #topic-submit-btn {
+    background-color: var(--color-st-blue);
+    color: var(--color-st-antiwhite);
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 10px 24px;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
     margin-top: 1.5rem;
 }
 
+#topic-submit-btn:hover {
+    background-color: var(--color-st-blue-mid);
+}
+
 #topicsList {
-    background-color: var(--color-st-antiwhite);
-    border-radius: var(--radius-md);
-    padding: 1rem;
-    box-shadow: var(--shadow-md);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 640px;
+    margin: 32px auto;
+    background-color: transparent;
+    box-shadow: none;
+    padding: 0;
 }
 
 .topic-item {
+    background-color: var(--color-st-gray-darker);
+    border: 1px solid var(--color-st-lightgray2);
+    border-radius: var(--border-radius-lg);
+    padding: 16px 20px;
+    box-shadow: var(--shadow-md);
     display: flex;
+    flex-direction: row;
     align-items: center;
-    padding: 0.75rem;
-    border-bottom: 1px solid var(--color-border);
+    gap: 12px;
+    color: var(--color-st-antiwhite);
+    margin-bottom: 0;
     transition: background-color 0.2s;
 }
 
@@ -79,18 +142,18 @@ form {
 }
 
 .topic-item .topic-name {
-    flex: 1;
+    font-size: 1.1rem;
     font-weight: 500;
-    color: black;
+    color: var(--color-st-antiwhite);
 }
 
 .topic-item .topic-stats {
-    margin: 0 0.75rem;
     color: var(--color-st-lightgray);
-    font-size: 0.85rem;
+    font-size: 0.95rem;
 }
 
 .topic-item .topic-actions {
+    margin-left: auto;
     display: flex;
     gap: 0.5rem;
 }
@@ -144,16 +207,15 @@ form {
     #topicForm {
         padding: 1rem;
     }
-}
-
-.topic-card span.material-icons {
-    font-size: 28px;
-    color: var(--color-st-blue);
-}
-
-.topic-item button {
-    background: none;
-    border: none;
-    margin-left: 8px;
-    cursor: pointer;
+    .topic-header img,
+    #topicForm>img.logo {
+        max-width: 60px;
+    }
+    #topicsList {
+        max-width: 100%;
+        margin: 16px 0;
+    }
+    .topic-item {
+        padding: 12px 8px;
+    }
 }
