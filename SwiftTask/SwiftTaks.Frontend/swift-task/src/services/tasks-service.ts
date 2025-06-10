@@ -1,71 +1,67 @@
-const BASE_URL = "/api/task";
+import Alpine from 'alpinejs';
 
-// Интерфейс задачи, соответствующий тому, что мы ожидаем от бэкенда
-export interface TaskDto {
+interface TaskDto {
   id: number;
   title: string;
-  description: string;
+  description?: string;
   dueDate: string;
   isDone: boolean;
   topicName: string;
 }
 
-// Получение всех задач
-export async function fetchAllTasks(): Promise<TaskDto[]> {
-  const res = await fetch(BASE_URL);
+const API_BASE = "https://localhost:7050/api";
+
+function getAuthHeaders(): HeadersInit {
+  const token = Alpine.store('auth')?.token;
+  return token ? { 'Authorization': `Bearer ${token}` } : {};
+}
+
+async function fetchTasks(): Promise<TaskDto[]> {
+  const res = await fetch(`${API_BASE}/Task`, {
+    headers: getAuthHeaders(),
+  });
   if (!res.ok) throw new Error("Failed to fetch tasks");
   return await res.json();
 }
 
-// Получение задачи по ID
-export async function fetchTaskById(id: number): Promise<TaskDto> {
-  const res = await fetch(`${BASE_URL}/${id}`);
-  if (!res.ok) throw new Error(`Task ${id} not found`);
-  return await res.json();
-}
-
-// Получение задач по названию темы
-export async function fetchTasksByTopic(topicName: string): Promise<TaskDto[]> {
-  const res = await fetch(`${BASE_URL}/topic/${encodeURIComponent(topicName)}`);
-  if (!res.ok) throw new Error(`No tasks for topic: ${topicName}`);
-  return await res.json();
-}
-
-// Создание новой задачи
-export async function createTask(
-  title: string,
-  description: string,
-  dueDate: string,
-  topicName: string
-): Promise<TaskDto> {
-  const res = await fetch(BASE_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ title, description, dueDate, topicName })
+async function createTask(payload: Omit<TaskDto, 'id'>): Promise<TaskDto> {
+  const res = await fetch(`${API_BASE}/Task`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeaders(),
+    },
+    body: JSON.stringify(payload),
   });
   if (!res.ok) throw new Error("Failed to create task");
   return await res.json();
 }
 
-// Обновление существующей задачи
-export async function updateTask(
-  id: number,
-  title: string,
-  description: string,
-  isDone: boolean,
-  dueDate: string,
-  topicName: string
-): Promise<void> {
-  const res = await fetch(`${BASE_URL}/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ title, description, isDone, dueDate, topicName })
+async function updateTask(id: number, payload: TaskDto): Promise<void> {
+  const res = await fetch(`${API_BASE}/Task/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeaders(),
+    },
+    body: JSON.stringify(payload),
   });
-  if (!res.ok) throw new Error(`Failed to update task ${id}`);
+  if (!res.ok) throw new Error("Failed to update task");
 }
 
-// Удаление задачи
-export async function deleteTask(id: number): Promise<void> {
-  const res = await fetch(`${BASE_URL}/${id}`, { method: "DELETE" });
-  if (!res.ok) throw new Error(`Failed to delete task ${id}`);
+async function deleteTask(id: number): Promise<void> {
+  const res = await fetch(`${API_BASE}/Task/${id}`, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error("Failed to delete task");
 }
+
+const TasksService = {
+  fetchTasks,
+  createTask,
+  updateTask,
+  deleteTask
+};
+
+export default TasksService;
