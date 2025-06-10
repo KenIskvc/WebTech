@@ -16,6 +16,7 @@
     {
         public int Id { get; init; }
         public string Description { get; init; }
+        public DateTime DueDate { get; init; }
         public bool IsDone { get; init; }
         public string TopicName { get; init; }
     }

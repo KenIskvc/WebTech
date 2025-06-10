@@ -1,90 +1,83 @@
-export function renderTasksPage(container: HTMLElement, data: any, id?: string): void {
-  const taskId = id ? parseInt(id) : null;
-  const task = taskId ? data.tasks.find((t: any) => t.id === taskId) : null;
-  const sortedTasks = data.tasks.slice().sort((a: any, b: any) => a.dueDate.localeCompare(b.dueDate));
 
-  container.innerHTML = `
-    <h2>${task ? "Edit Task" : "New Task"}</h2>
-    <form id="taskForm">
-     <label for="taskTitle">Title:</label>
-<div class="voice-input-wrapper">
-  <input type="text" id="taskTitle" name="title" maxlength="50" value="${task ? task.title : ""}" required />
-  <button type="button" id="micBtn" title="Speak task title">🎤</button>
-</div>
+import TasksService from "../../services/tasks-service";
 
-      
-      <label for="taskDescription">Description:</label>
-      <textarea id="taskDescription" name="description" maxlength="200" rows="3">${task ? task.description : ""}</textarea>
-      
-      <label for="taskTopic">Topic:</label>
-      <select id="taskTopic" name="topic">
-        ${data.topics.map((topic: any) => `
-          <option value="${topic.id}" ${task && task.topicId === topic.id ? "selected" : ""}>${topic.name}</option>
-        `).join('')}
-      </select>
+console.log("✅ tasks.ts module loaded");
 
-      <label for="taskDueDate">Due Date:</label>
-      <input type="date" id="taskDueDate" name="dueDate" value="${task ? task.dueDate : ""}" />
-      
-      <label>
-        <span>Completed</span>
-        <input type="checkbox" id="taskCompleted" name="completed" ${task && task.completed ? "checked" : ""} />
-      </label>
+export default async function () {
+  const app = document.getElementById("app");
+  if (!app) return;
 
-      <button type="submit">${task ? "Save Changes" : "Add Task"}</button>
-    </form>
+  // Get form and input elements
+  const form = app.querySelector("#task-form") as HTMLFormElement;
+  const descInput = app.querySelector("#task-desc") as HTMLTextAreaElement;
+  const dueDateInput = app.querySelector("#task-due") as HTMLInputElement;
+  const topicInput = app.querySelector("#task-topic") as HTMLSelectElement;
+  const isDoneCheckbox = app.querySelector("#task-done") as HTMLInputElement;
 
-    <h3>All Tasks</h3>
-    <div id="tasksList">
-      ${sortedTasks.map((t: any) => {
-        const topicName = data.topics.find((topic: any) => topic.id === t.topicId)?.name || "Unknown";
-        return `
-          <div class="task-item ${t.completed ? "completed" : ""}">
-            <span>${t.title} (${topicName}) - Due: ${t.dueDate}</span>
-          </div>
-        `;
-      }).join('')}
-    </div>
-  `;
+  const taskListContainer = app.querySelector("#task-list") as HTMLDivElement;
 
- 
-  const form = document.getElementById("taskForm") as HTMLFormElement;
-  form.addEventListener("submit", (e: Event) => {
+
+  async function populateTopicDropdown(tasks: any[]) {
+    const select = document.getElementById("task-topic") as HTMLSelectElement;
+    const topicSet = new Set<string>();
+
+    tasks.forEach(task => {
+      if (task.topicName) {
+        topicSet.add(task.topicName);
+      }
+       });
+
+       select.innerHTML = '<option value="" disabled selected>Select Topic</option>';
+
+        topicSet.forEach(topic => {
+      const opt = document.createElement("option");
+      opt.value = topic;
+      opt.textContent = topic;
+      select.appendChild(opt);
+    });
+  }
+
+
+  // Load all tasks from backend and show them
+  async function loadTasks() {
+    const tasks = await TasksService.fetchTasks();
+    taskListContainer.innerHTML = ""; // Clear before adding
+
+    await populateTopicDropdown(tasks);
+    
+
+    tasks.forEach((task) => {
+      const taskDiv = document.createElement("div");
+      taskDiv.className = "task-item";
+      taskDiv.innerHTML = `
+  <div class="task-topic">${task.topicName}</div>
+  <div class="task-desc">${task.description || ""}</div>
+  <div class="task-due"><strong>Due Date:</strong> ${new Date(task.dueDate).toLocaleDateString()}</div>
+  <div class="checkbox-wrapper">
+    <input type="checkbox" disabled ${task.isDone ? "checked" : ""} />
+    <label>Is Done</label>
+  </div>
+`;
+      taskListContainer.appendChild(taskDiv);
+    });
+  }
+
+  await loadTasks(); // Run once on page load
+
+  // When form is submitted (new task), send it to backend
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    alert("Task saved");
+
+    const newTask = {
+      description: descInput.value,
+      dueDate: dueDateInput.value,
+      topicName: topicInput.value,
+      isDone: false,
+    };
+
+    await TasksService.createTask(newTask); // Save task
+    await loadTasks(); // Refresh list
+    form.reset(); // Clear form
+
   });
-}
-
-
-const mockData = {
-  topics: [
-    { id: 1, name: "Work", icon: "work", color: "#3A8DFF", created: "2025-05-01", autoDelete: 30 },
-    { id: 2, name: "Personal", icon: "person", color: "#FF6B6B", created: "2025-05-03", autoDelete: 0 }
-  ],
-  tasks: [
-    {
-      id: 1,
-      title: "Finish report",
-      description: "Complete the quarterly report",
-      topicId: 1,
-      dueDate: "2025-06-10",
-      completed: false,
-      priority: "high"
-    },
-    {
-      id: 2,
-      title: "Buy milk",
-      description: "Get milk and eggs",
-      topicId: 2,
-      dueDate: "2025-06-11",
-      completed: true,
-      priority: "low"
-    }
-  ]
-};
-
-
-const container = document.getElementById("app");
-if (container) {
-  renderTasksPage(container, mockData);
 }

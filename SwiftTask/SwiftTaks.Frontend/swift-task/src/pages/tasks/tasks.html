@@ -1,89 +1,40 @@
-<div class="tasks-container">
-    <h2 id="tasks-title">Tasks</h2>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/pages/tasks/tasks.css" rel="stylesheet" />
+    <script type="module" src="./tasks.ts"></script>
+  </head>
+  <body>
+    <div class="task-container" id="app">
+      <div class="task-card">
+  <div class="task-header">
+    <img src="/swifttask-icon.png" class="logo vanilla" alt="SwiftTask logo" />
+     <h3>New Task</h3>
+      </div>
 
-    <div class="tasks-controls">
-        <div class="filters">
-            <input type="text" id="taskSearch" placeholder="Search tasks..." />
-            <select id="topicFilter">
-        <option value="all">All Topics</option>
-        <!-- Topics will be added dynamically -->
-      </select>
-            <select id="statusFilter">
-        <option value="all">All Status</option>
-        <option value="active">Active</option>
-        <option value="completed">Completed</option>
-      </select>
+        <div class="task-form-container">
+          <form class="task-form" id="task-form">
+            <textarea id="task-desc" rows="2" placeholder="Description (optional)"></textarea>
+            <select id="task-topic" required>
+            <option value="" disabled selected>Select Topic</option>
+            </select>
+            <input id="task-due" type="date" placeholder="Due Date" required />
+           <div class="checkbox-wrapper">
+  <input id="task-done" type="checkbox" />
+  <label for="task-done">Is Done</label>
+</div>
+            <button type="submit">Add Task</button>
+          </form>
         </div>
+      </div>
+
+      <div class="task-list-card">
+        <h3>All Tasks</h3>
+        <div id="task-list" class="task-list"></div>
+      </div>
     </div>
-
-    <div id="taskFormContainer" class="task-form-container hidden">
-        <form id="taskForm">
-            <h3 id="form-title">Add New Task</h3>
-
-            <label for="taskTitle">Title:</label>
-            <input type="text" id="taskTitle" required placeholder="What needs to be done?" />
-
-            <label for="taskTopic">Topic:</label>
-            <select id="taskTopic" required>
-        <!-- Topics will be added dynamically -->
-      </select>
-
-            <label for="taskDueDate">Due Date:</label>
-            <input type="date" id="taskDueDate" />
-
-            <label for="taskPriority">Priority:</label>
-            <select id="taskPriority">
-        <option value="low">Low</option>
-        <option value="medium" selected>Medium</option>
-        <option value="high">High</option>
-      </select>
-
-            <div class="form-buttons">
-                <button type="submit" class="btn">Save Task</button>
-                <button type="button" id="cancelTaskBtn" class="btn btn-secondary">Cancel</button>
-            </div>
-        </form>
-    </div>
-
-    <div id="taskListContainer" class="task-list-container">
-        <!-- Tasks will be rendered here -->
-    </div>
-</div>
-<section class="tasks-page">
-  <h2>New Task</h2>
-  <form id="taskForm">
-   <label for="taskTitle">Title:</label>
-<div class="voice-input-wrapper">
-  <input type="text" id="taskTitle" name="title" maxlength="50" required placeholder="Type or use microphone..." />
-  <button type="button" id="micBtn" title="Use microphone to fill in title">🎤</button>
-</div>
-
-    <label for="taskDescription">Description:</label>
-    <textarea id="taskDescription" name="description" maxlength="200" rows="3"></textarea>
-
-    <label for="taskTopic">Topic:</label>
-    <select id="taskTopic" name="topic">
-     
-    </select>
-
-    <label for="taskPriority">Priority:</label>
-    <select id="taskPriority" name="priority">
-      <option value="low">Low</option>
-      <option value="medium">Medium</option>
-      <option value="high">High</option>
-    </select>
-
-    <label for="taskDueDate">Due Date:</label>
-    <input type="date" id="taskDueDate" name="dueDate" />
-
-    <label style="display: flex; align-items: center; gap: 6px;">
-      <span>Completed</span>
-      <input type="checkbox" id="taskCompleted" name="completed" />
-    </label>
-
-    <button type="submit">Add Task</button>
-  </form>
-
-  <h3>All Tasks</h3>
-  <div id="tasksList"></div>
-</section>
+  </body>
+</html>
