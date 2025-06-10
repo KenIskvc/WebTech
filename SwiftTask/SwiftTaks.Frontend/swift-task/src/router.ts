@@ -40,6 +40,36 @@ export function setupRoutes() {
         "<h1>404 - Page Not Found</h1>";
     })
     .resolve();
+  // router
+  //   .on({
+  //     "/": () => router.navigate("/home"),
+
+  //     login: async () => {
+  //       removeLayout();
+  //       await loadPage("login", false);
+  //     },
+  //     signup: async () => {
+  //       removeLayout();
+  //       await loadPage("signup", false);
+  //     },
+  //     sst: async () => {
+  //       removeLayout();
+  //       await loadPage("sst", false);
+  //     },
+
+  //     home: () => authGuard(() => loadPage("home", true)),
+  //     profile: () => authGuard(() => loadPage("profile", true)),
+  //     about: () => authGuard(() => loadPage("about", true)),
+  //     dashboard: () => authGuard(() => loadPage("dashboard", true)),
+  //     settings: () => authGuard(() => loadPage("settings", true)),
+  //     tasks: () => authGuard(() => loadPage("tasks", true)),
+  //     topics: () => authGuard(() => loadPage("topics", true)),
+  //   })
+  //   .resolve();
+
+  // router.notFound(() => {
+  //   document.getElementById("app")!.innerHTML = "<h1>404 - Page Not Found</h1>";
+  // });
 }
 
 export async function navigateTo(page: string, options?: { layout?: boolean }) {
@@ -63,9 +93,10 @@ export async function navigateTo(page: string, options?: { layout?: boolean }) {
   let target: HTMLElement;
 
   if (useLayout) {
+    // Mount layout if not yet mounted
     if (!document.getElementById("app-content")) {
       mountLayout();
-      layoutEventsBound = false;
+      layoutEventsBound = false; // Reset so we can rebind
     }
 
     const appContent = document.getElementById("app-content")!;
@@ -73,11 +104,12 @@ export async function navigateTo(page: string, options?: { layout?: boolean }) {
 
     appContent.innerHTML = html;
 
+    // Reset sidebar/overlay state
     document.querySelector(".sidebar")?.classList.remove("open");
     overlay.classList.remove("show");
 
     if (!layoutEventsBound) {
-      setUpLayout();
+      await setUpLayout();
       layoutEventsBound = true;
     }
 

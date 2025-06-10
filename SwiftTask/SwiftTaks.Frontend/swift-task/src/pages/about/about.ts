@@ -1,3 +1,4 @@
+
 // TypeScript version of about.js
 /*export function renderAboutPage(container: HTMLElement, data: any): void {
     container.innerHTML = `
@@ -21,8 +22,9 @@
   `;
 }
 */
+
 // About Page – static info with placeholder team
-export function renderAboutPage(container: HTMLElement, _data: any): void {
+/*port function renderAboutPage(container: HTMLElement, _data: any): void {
   container.innerHTML = `
     <section class="about-page">
       <h1>About SwiftTask</h1>
@@ -46,3 +48,5 @@ export function renderAboutPage(container: HTMLElement, _data: any): void {
     </section>
   `;
 }
+>>>>>>> origin/main
+*/
