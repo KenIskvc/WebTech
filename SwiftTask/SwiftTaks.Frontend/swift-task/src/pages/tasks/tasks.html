@@ -2,27 +2,30 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Tasks | SwiftTask</title>
+  
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="/pages/tasks/tasks.css" rel="stylesheet" />
-    <script type="module" src="/pages/tasks/tasks.ts"></script>
+    <script type="module" src="./tasks.ts"></script>
   </head>
   <body>
     <div class="task-container" id="app">
       <div class="task-card">
-        <img src="/swifttask-icon.png" class="logo vanilla" alt="SwiftTask logo" />
-        <h3>New Task</h3>
+  <div class="task-header">
+    <img src="/swifttask-icon.png" class="logo vanilla" alt="SwiftTask logo" />
+     <h3>New Task</h3>
+      </div>
 
         <div class="task-form-container">
           <form class="task-form" id="task-form">
-            <input id="task-title" type="text" placeholder="Title" required />
             <textarea id="task-desc" rows="2" placeholder="Description (optional)"></textarea>
-            <input id="task-topic" type="text" placeholder="Topic" required />
+            <select id="task-topic" required>
+            <option value="" disabled selected>Select Topic</option>
+            </select>
             <input id="task-due" type="date" placeholder="Due Date" required />
-            <label>
-              <input id="task-done" type="checkbox" />
-              Is Done
-            </label>
+           <div class="checkbox-wrapper">
+  <input id="task-done" type="checkbox" />
+  <label for="task-done">Is Done</label>
+</div>
             <button type="submit">Add Task</button>
           </form>
         </div>

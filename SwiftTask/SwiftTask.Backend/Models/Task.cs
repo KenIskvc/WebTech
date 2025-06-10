@@ -4,9 +4,8 @@ namespace SwiftTask.Backend.Models
 {
     public class Task
     {
-        public Task(string? title, string? description, Topic? topic, DateTime? dueDate, bool isDone = false)
+        public Task(string? description, Topic? topic, DateTime? dueDate, bool isDone = false)
         {
-            Title = title;
             Description = description;
             Topic = topic;
             TopicId = topic.Id;
@@ -18,7 +17,7 @@ namespace SwiftTask.Backend.Models
         public Task() { }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-        public string? Title { get; set; }
+
         public int Id { get; private set; }
         public DateTime? DueDate { get; set; }
         public string? Description { get; set; }

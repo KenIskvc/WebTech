@@ -15,8 +15,8 @@ public class TaskController : ControllerBase {
 
     public TaskController(SwiftTaskDbContext context) => _context = context;
 
-    public record UpdateTaskDto(string Title, string Description, bool IsDone, DateTime? DueDate, string TopicName);
-    public record CreateTaskDto(string Title, string? Description, DateTime? DueDate, string TopicName);
+    public record UpdateTaskDto(string Description, bool IsDone, DateTime? DueDate, string TopicName);
+    public record CreateTaskDto( string? Description, DateTime? DueDate, string TopicName);
 
 
     // GET: api/Task
@@ -34,7 +34,6 @@ public class TaskController : ControllerBase {
             .Select(t => new TaskDto
             {
                 Id = t.Id,
-                Title = t.Title,
                 Description = t.Description,
                 DueDate = t.DueDate ?? DateTime.UtcNow,
                 IsDone = t.IsDone,
@@ -61,7 +60,6 @@ public class TaskController : ControllerBase {
                 .Select(t => new TaskDto
                 {
                     Id = t.Id,
-                    Title = t.Title,
                     Description = t.Description,
                     DueDate = t.DueDate ?? DateTime.UtcNow,
                     IsDone = t.IsDone,
@@ -91,7 +89,7 @@ public class TaskController : ControllerBase {
         var dto = new TaskDto
         {
             Id = t.Id,
-            Title = t.Title,
+          
             Description = t.Description,
             DueDate = t.DueDate ?? DateTime.UtcNow,
             IsDone = t.IsDone,
@@ -124,7 +122,7 @@ public class TaskController : ControllerBase {
         var topic = await _context.Topics.SingleOrDefaultAsync(t => t.Name == dto.TopicName);
         if (topic == null) return BadRequest($"Topic '{dto.TopicName}' not found");
 
-        task.Title = string.IsNullOrWhiteSpace(dto.Title) ? "New Task" : dto.Title;
+       
         task.Description = dto.Description;
         task.DueDate = dto.DueDate ?? DateTime.UtcNow.AddDays(7);
         task.IsDone = dto.IsDone;
@@ -180,7 +178,7 @@ public class TaskController : ControllerBase {
 
         var entity = new Task
         {
-            Title = string.IsNullOrWhiteSpace(dto.Title) ? "New Task" : dto.Title,
+          
             Description = dto.Description ?? "",
             DueDate = dto.DueDate ?? DateTime.UtcNow.AddDays(7),
             TopicId = topic.Id,
@@ -193,7 +191,6 @@ public class TaskController : ControllerBase {
         var result = new TaskDto
         {
             Id = entity.Id,
-            Title = entity.Title,
             Description = entity.Description,
             DueDate = entity.DueDate ?? DateTime.UtcNow,
             IsDone = entity.IsDone,

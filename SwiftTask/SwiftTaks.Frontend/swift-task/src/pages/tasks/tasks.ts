@@ -9,29 +9,55 @@ export default async function () {
 
   // Get form and input elements
   const form = app.querySelector("#task-form") as HTMLFormElement;
-  const titleInput = app.querySelector("#task-title") as HTMLInputElement;
-  const descInput = app.querySelector("#task-desc") as HTMLInputElement;
+  const descInput = app.querySelector("#task-desc") as HTMLTextAreaElement;
   const dueDateInput = app.querySelector("#task-due") as HTMLInputElement;
-  const topicInput = app.querySelector("#task-topic") as HTMLInputElement;
+  const topicInput = app.querySelector("#task-topic") as HTMLSelectElement;
   const isDoneCheckbox = app.querySelector("#task-done") as HTMLInputElement;
 
   const taskListContainer = app.querySelector("#task-list") as HTMLDivElement;
+
+
+  async function populateTopicDropdown(tasks: any[]) {
+    const select = document.getElementById("task-topic") as HTMLSelectElement;
+    const topicSet = new Set<string>();
+
+    tasks.forEach(task => {
+      if (task.topicName) {
+        topicSet.add(task.topicName);
+      }
+       });
+
+       select.innerHTML = '<option value="" disabled selected>Select Topic</option>';
+
+        topicSet.forEach(topic => {
+      const opt = document.createElement("option");
+      opt.value = topic;
+      opt.textContent = topic;
+      select.appendChild(opt);
+    });
+  }
+
 
   // Load all tasks from backend and show them
   async function loadTasks() {
     const tasks = await TasksService.fetchTasks();
     taskListContainer.innerHTML = ""; // Clear before adding
 
+    await populateTopicDropdown(tasks);
+    
+
     tasks.forEach((task) => {
       const taskDiv = document.createElement("div");
       taskDiv.className = "task-item";
       taskDiv.innerHTML = `
-        <strong>${task.title}</strong> (${task.topicName})<br/>
-        ${task.description || ""}<br/>
-        Due: ${new Date(task.dueDate).toLocaleDateString()}<br/>
-        Done: ${task.isDone ? "✅" : "❌"}<br/>
-        <hr/>
-      `;
+  <div class="task-topic">${task.topicName}</div>
+  <div class="task-desc">${task.description || ""}</div>
+  <div class="task-due"><strong>Due Date:</strong> ${new Date(task.dueDate).toLocaleDateString()}</div>
+  <div class="checkbox-wrapper">
+    <input type="checkbox" disabled ${task.isDone ? "checked" : ""} />
+    <label>Is Done</label>
+  </div>
+`;
       taskListContainer.appendChild(taskDiv);
     });
   }
@@ -43,7 +69,6 @@ export default async function () {
     e.preventDefault();
 
     const newTask = {
-      title: titleInput.value,
       description: descInput.value,
       dueDate: dueDateInput.value,
       topicName: topicInput.value,
