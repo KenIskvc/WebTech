@@ -75,10 +75,10 @@ export function setupRoutes() {
 export async function navigateTo(page: string, options?: { layout?: boolean }) {
   const useLayout = options?.layout ?? false;
 
-   if (!useLayout) {
+  if (!useLayout) {
     removeLayout();
   }
-  
+
   removePageAssets();
 
   const css = document.createElement("link");
@@ -87,8 +87,9 @@ export async function navigateTo(page: string, options?: { layout?: boolean }) {
   css.id = "page-style";
   document.head.appendChild(css);
 
-
-  const html = await fetch(`/src/pages/${page}/${page}.html`).then(res => res.text());
+  const html = await fetch(`/src/pages/${page}/${page}.html`).then((res) =>
+    res.text()
+  );
 
   let target: HTMLElement;
 
@@ -96,7 +97,7 @@ export async function navigateTo(page: string, options?: { layout?: boolean }) {
     // Mount layout if not yet mounted
     if (!document.getElementById("app-content")) {
       mountLayout();
-      layoutEventsBound = false; // Reset so we can rebind
+      layoutEventsBound = false;
     }
 
     const appContent = document.getElementById("app-content")!;
@@ -119,7 +120,9 @@ export async function navigateTo(page: string, options?: { layout?: boolean }) {
     target.innerHTML = html;
   }
 
-  const pageModules = import.meta.glob<{ default?: () => void }>(`./pages/**/*.ts`);
+  const pageModules = import.meta.glob<{ default?: () => void }>(
+    `./pages/**/*.ts`
+  );
   const path = `./pages/${page}/${page}.ts`;
 
   try {

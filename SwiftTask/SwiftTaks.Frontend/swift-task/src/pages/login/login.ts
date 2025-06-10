@@ -2,7 +2,8 @@ import { router } from '../../router';
 import AuthService from '../../services/auth-service';
 
 console.log("login.ts");
-function setupLogin() {
+
+export default function setupLogin() {
   console.log("✅ login.ts loaded");
   const form = document.getElementById('login-form') as HTMLFormElement;
 
@@ -24,4 +25,4 @@ function setupLogin() {
   });
 }
 
-setupLogin(); 
+// setupLogin(); 
