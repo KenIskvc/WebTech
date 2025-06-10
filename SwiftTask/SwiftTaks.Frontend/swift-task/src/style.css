@@ -21,6 +21,7 @@
     /* 70% opaque light blue */
     --color-st-antiwhite: #f5f7fa;
     --color-st-gray: #4a5568;
+    --color-st-gray-darker: #3a3f4c;
     --color-st-lightgray: #a0aec0;
     --color-st-red: #ff6b6b;
     --color-st-antiwhite: #e9ecef;
@@ -69,9 +70,8 @@ h1 {
 
 #app {
     flex-grow: 1;
-    min-height: 100vh;
-    box-sizing: border-box;
-    padding: 15px;
+    display: flex;
+    flex-direction: column;
 }
 
 .logo {
@@ -109,7 +109,7 @@ button {
     /* background-color: #1a1a1a; */
     background-color: var(--color-st-blue);
     cursor: pointer;
-    transition: border-color 0.25s;
+    transition: border-color 0.3s;
     color: var(--color-st-gray);
     transition: background-color 0.3s;
 }
@@ -135,20 +135,6 @@ button:focus {
     }
 }
 
-html {
-    font-size: 16px;
-    font-family: var(--font-family);
-    color: var(--color-text);
-    background-color: var(--color-bg);
-    line-height: 1.5;
-}
-
-body {
-    margin: 0;
-    padding: 0;
-}
-
-
 /* Container grid for desktop (set in responsive.css for larger screens) */
 
 .container {
@@ -158,32 +144,6 @@ body {
     padding-left: var(--base-spacing);
     padding-right: var(--base-spacing);
     box-sizing: border-box;
-}
-
-header {
-    background-color: var(--color-st-antiwhite);
-    display: flex;
-    box-shadow: var(--shadow-sm);
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    height: 65px;
-    align-items: center;
-    z-index: 100;
-    padding: 1rem;
-    border-bottom: 1px solid var(--color-st-antiwhite);
-}
-
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.logo1 {
-    font-size: 1.2em;
-    font-weight: bold;
-    margin-left: 0px;
 }
 
 
@@ -252,6 +212,42 @@ form textarea:focus {
 
 .task-item .task-title {
     margin-left: 2px;
+}
+
+
+/* Add-task (+) button for topic cards */
+
+.add-task-btn {
+    margin-left: auto;
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+    transition: background 0.2s, box-shadow 0.2s;
+    font-size: 1.2rem;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+}
+
+.add-task-btn:hover,
+.add-task-btn:focus {
+    background: var(--primary-color-dark);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.topic-card .topic-header {
+    position: relative;
+    padding-right: 36px;
+    /* space for the + button */
 }
 
 
@@ -339,7 +335,6 @@ form textarea:focus {
     }
     header {
         padding: 6px 12px;
-        min-height: 44px;
     }
     .burger-btn {
         font-size: 1.1rem;

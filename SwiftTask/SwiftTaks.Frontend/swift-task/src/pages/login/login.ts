@@ -1,6 +1,5 @@
 import { router } from '../../router';
 import AuthService from '../../services/auth-service';
-import Alpine from 'alpinejs';
 
 console.log("login.ts");
 function setupLogin() {
@@ -18,7 +17,6 @@ function setupLogin() {
     const success = await AuthService.loginAsync(email, password);
 
     if (success) {
-      await Alpine.store("weather").init();
       router.navigate("/home");
     } else {
       alert('Login failed. Please check your credentials.');

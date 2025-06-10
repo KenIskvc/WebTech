@@ -62,6 +62,7 @@ public class SwiftTaskDbContext : IdentityDbContext<IdentityUser>
         }
 
         Topics.AddRange( topics );
+        
         SaveChanges();
     }
 }
