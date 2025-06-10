@@ -1,4 +1,6 @@
+
 import Alpine from 'alpinejs';
+
 
 interface TaskDto {
   id: number;
@@ -16,7 +18,9 @@ function getAuthHeaders(): HeadersInit {
   return token ? { 'Authorization': `Bearer ${token}` } : {};
 }
 
+
 async function fetchTasks(): Promise<TaskDto[]> {
+
   const res = await fetch(`${API_BASE}/Task`, {
     headers: getAuthHeaders(),
   });
@@ -38,6 +42,7 @@ async function createTask(payload: Omit<TaskDto, 'id'>): Promise<TaskDto> {
 }
 
 async function updateTask(id: number, payload: TaskDto): Promise<void> {
+
   const res = await fetch(`${API_BASE}/Task/${id}`, {
     method: 'PUT',
     headers: {
@@ -49,12 +54,15 @@ async function updateTask(id: number, payload: TaskDto): Promise<void> {
   if (!res.ok) throw new Error("Failed to update task");
 }
 
+
 async function deleteTask(id: number): Promise<void> {
+
   const res = await fetch(`${API_BASE}/Task/${id}`, {
     method: 'DELETE',
     headers: getAuthHeaders(),
   });
   if (!res.ok) throw new Error("Failed to delete task");
+
 }
 
 const TasksService = {
@@ -65,3 +73,4 @@ const TasksService = {
 };
 
 export default TasksService;
+

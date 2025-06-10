@@ -53,5 +53,6 @@ export default async function () {
     await TasksService.createTask(newTask); // Save task
     await loadTasks(); // Refresh list
     form.reset(); // Clear form
+
   });
 }
