@@ -1,8 +1,20 @@
 // src/services/topic-service.ts
 // Service for connecting frontend to backend TopicController
-import { TopicDto } from '../types/dtos';
+
+import Alpine from 'alpinejs';
+import { User } from '../models/User';
+export interface TopicDto{
+  Id : number;
+  Name: string;
+  Tasks: TaskDto[];
+}
+export interface TaskDto {
+  Id: number;
+  Description: string;
+}
 
 const API_BASE = 'https://localhost:7050/api';
+const user : User = Alpine.store('auth').user as User;
 
 function getAuthHeaders(): HeadersInit {
   const token = window.Alpine?.store('auth')?.token;
@@ -10,8 +22,9 @@ function getAuthHeaders(): HeadersInit {
 }
 
 // GET: api/Topic?userId=...
-export async function fetchTopics(userId: string): Promise<TopicDto[]> {
-  const res = await fetch(`${API_BASE}/Topic?userId=${encodeURIComponent(userId)}`, {
+async function fetchTopics(): Promise<TopicDto[]> {
+  console.log(user.id);
+  const res = await fetch(`${API_BASE}/Topic?userId=${encodeURIComponent(user.id)}`, {
     headers: getAuthHeaders(),
   });
   if (!res.ok) {
@@ -22,7 +35,7 @@ export async function fetchTopics(userId: string): Promise<TopicDto[]> {
 }
 
 // GET: api/Topic/{id}
-export async function fetchTopic(id: number): Promise<TopicDto> {
+async function fetchTopic(id: number): Promise<TopicDto> {
   const res = await fetch(`${API_BASE}/Topic/${id}`, {
     headers: getAuthHeaders(),
   });
@@ -34,7 +47,7 @@ export async function fetchTopic(id: number): Promise<TopicDto> {
 }
 
 // POST: api/Topic (TopicCreateDto)
-export async function createTopic(topic: { Name: string; UserId: string }): Promise<TopicDto> {
+async function createTopic(topic: { Name: string; UserId: string }): Promise<TopicDto> {
   const res = await fetch(`${API_BASE}/Topic`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
@@ -48,7 +61,7 @@ export async function createTopic(topic: { Name: string; UserId: string }): Prom
 }
 
 // PUT: api/Topic/{id} (TopicDto)
-export async function updateTopic(id: number, topic: TopicDto): Promise<void> {
+async function updateTopic(id: number, topic: TopicDto): Promise<void> {
   const res = await fetch(`${API_BASE}/Topic/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
@@ -61,7 +74,7 @@ export async function updateTopic(id: number, topic: TopicDto): Promise<void> {
 }
 
 // DELETE: api/Topic/{id}
-export async function deleteTopic(id: number): Promise<void> {
+async function deleteTopic(id: number): Promise<void> {
   const res = await fetch(`${API_BASE}/Topic/${id}`, {
     method: 'DELETE',
     headers: getAuthHeaders(),
@@ -71,3 +84,11 @@ export async function deleteTopic(id: number): Promise<void> {
     throw new Error(`Failed to delete topic: ${res.status} ${res.statusText} - ${errorText}`);
   }
 }
+const TopicService = {
+  fetchTopics,
+  fetchTopic,
+  createTopic,
+  updateTopic,
+  deleteTopic
+};
+export default TopicService;
